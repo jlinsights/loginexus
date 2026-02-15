@@ -6,7 +6,7 @@ from app.database import engine, Base
 from app import models # Ensure models are imported so metadata is registered
 
 # Create Tables (for dev usage)
-Base.metadata.create_all(bind=engine)
+# Base.metadata.create_all(bind=engine)  # Disabled in favor of Alembic migrations
 
 app = FastAPI(title="LogiNexus API")
 

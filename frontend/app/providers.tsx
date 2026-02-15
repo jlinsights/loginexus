@@ -3,7 +3,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useState, type ReactNode, Suspense } from 'react'
 import { WagmiProvider } from 'wagmi'
-import { config } from '../lib/wagmi' 
+import { config } from '../lib/wagmi'
 import { WhitelabelProvider } from './components/WhitelabelProvider'
 
 export function Providers(props: { children: ReactNode }) {
