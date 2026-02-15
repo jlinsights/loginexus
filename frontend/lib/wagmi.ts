@@ -7,6 +7,7 @@ export const config = createConfig({
   connectors: [
     injected(),
   ],
+  ssr: true,
   transports: {
     [mainnet.id]: http(),
     [sepolia.id]: http(),

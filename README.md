@@ -53,8 +53,8 @@ LogiNexus is a modern, enterprise-grade logistics management platform designed t
 │   │   ├── crud/         # Database Operations
 │   │   ├── midleware/    # Tenant Identity Middleware
 │   │   ├── models/       # SQLAlchemy Models
-│   │   └── schemas/      # Pydantic Schemas
-│   ├── main.py           # Application Entrypoint
+│   │   ├── schemas/      # Pydantic Schemas
+│   │   └── main.py       # Application Entrypoint
 │   └── seed_db.py        # Database Seeding Script
 ├── frontend/ (Next.js)
 │   ├── app/
@@ -90,7 +90,7 @@ LogiNexus is a modern, enterprise-grade logistics management platform designed t
     ```
 4.  **Run with Auto-reload:**
     ```bash
-    uvicorn main:app --reload
+    uvicorn app.main:app --reload
     ```
     API Docs available at: `http://localhost:8000/docs`
 

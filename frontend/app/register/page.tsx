@@ -1,12 +1,18 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
 import { registerTenant, TenantCreate } from '../../lib/api';
 
 export default function RegisterPage() {
-    const router = useRouter();
+    interface ApiError {
+        response?: {
+            data?: {
+                detail?: string;
+            };
+        };
+    }
+
     const [formData, setFormData] = useState<TenantCreate>({
         name: '',
         subdomain: '',
@@ -22,7 +28,6 @@ export default function RegisterPage() {
             const protocol = window.location.protocol;
             const host = window.location.host; // e.g., localhost:3000
             // Assuming localhost:3000 format, we prepend subdomain
-            // If host already has subdomain, replace it? simpler logic for now: default localhost handling
             if (host.includes('localhost')) {
                 window.location.href = `${protocol}//${data.subdomain}.${host}`;
             } else {
@@ -30,8 +35,10 @@ export default function RegisterPage() {
                  window.location.href = `${protocol}//${data.subdomain}.${host}`;
             }
         },
-        onError: (err: any) => {
-            setError(err.response?.data?.detail || "Registration failed");
+        onError: (err: unknown) => {
+            const apiError = err as ApiError;
+            const message = apiError.response?.data?.detail || "Registration failed";
+            setError(message);
         }
     });
 
