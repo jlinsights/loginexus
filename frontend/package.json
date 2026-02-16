@@ -16,9 +16,11 @@
     "leaflet": "^1.9.4",
     "lucide-react": "^0.330.0",
     "next": "14.2.14",
+    "next-intl": "^4.8.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-leaflet": "^4.2.1",
+    "recharts": "^3.7.0",
     "viem": "^2.7.1",
     "wagmi": "^2.5.7"
   },

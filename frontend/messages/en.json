@@ -1,0 +1,131 @@
+{
+  "HomePage": {
+    "title": "Logistics Everything,<br />In <span class=\"text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400\">One Platform</span>",
+    "subtitle": "From quotes to booking, real-time tracking, and blockchain settlement.<br />Manage complex international logistics easily with LogiNexus.",
+    "startForFree": "Start for Free",
+    "contactSales": "Contact Sales",
+    "blockchainBadge": "Blockchain-based Next Gen Logistics Platform",
+    "banner": "LogiNexus AI Quote Engine Beta Launched! Experience Real-time Rate Comparison",
+    "start": "Start Now",
+    "solutions": {
+      "transport": {
+        "title": "Transport Solutions",
+        "ocean": { "title": "Ocean FCL/LCL", "desc": "Real-time rates & booking for global routes" },
+        "air": { "title": "Air Express", "desc": "Urgent, dangerous, cold chain cargo" },
+        "trucking": { "title": "Intermodal", "desc": "Optimal Sea-Air, Rail-Sea routes" }
+      },
+      "manage": {
+        "title": "Tech Platform",
+        "digital": { "title": "Real-time Tracking", "desc": "AIS & IoT sensor based tracking" },
+        "tracking": { "title": "Blockchain Settlement", "desc": "Smart contract based escrow" },
+        "settlement": { "title": "AI Quote Engine", "desc": "Data-driven optimal rate recommendation" }
+      },
+      "finance": {
+        "title": "Logistics Consulting",
+        "scf": { "title": "Supply Chain Opt", "desc": "Lead time reduction & inventory strategy" },
+        "insurance": { "title": "Customs Advisory", "desc": "FTA, HS Code, tariff reduction" },
+        "payment": { "title": "Risk Management", "desc": "Marine insurance, claims, compliance" }
+      }
+    },
+    "segments": {
+      "shipper": {
+        "title": "For Shippers / Importers & Exporters",
+        "desc": "Automate complex logistics and cut costs with LogiNexus.",
+        "feature1": "Rate Comparison",
+        "feature2": "Real-time Tracking",
+        "feature3": "Secure Payment"
+      },
+      "forwarder": {
+        "title": "For Forwarders / Logistics Providers",
+        "desc": "Digitize sales and maximize operational efficiency.",
+        "feature1": "Customer CRM",
+        "feature2": "Automated Ops",
+        "feature3": "Global Network"
+      }
+    }
+  },
+  "Navigation": {
+    "product": "Product",
+    "solutions": "Solutions",
+    "pricing": "Pricing",
+    "support": "Support",
+    "login": "Login",
+    "getStarted": "Get Started",
+    "quoteProps": { "label": "Quote", "desc": "Real-time rates & quotes" },
+    "bookingProps": { "label": "Booking", "desc": "Easy booking requests" },
+    "trackingProps": { "label": "Tracking", "desc": "Global tracking" },
+    "settlementProps": { "label": "Settlement", "desc": "Blockchain settlement" },
+    "shipperProps": { "label": "For Shippers", "desc": "Manufacturing/Retail/Trade" },
+    "forwarderProps": { "label": "For Forwarders", "desc": "Forwarder/Consolidator" }
+  },
+  "Footer": {
+    "product": "Product",
+    "company": "Company",
+    "support": "Support",
+    "legal": "Legal",
+    "features": "Features",
+    "solutions": "Solutions",
+    "pricing": "Pricing",
+    "updates": "Updates",
+    "about": "About",
+    "careers": "Careers",
+    "blog": "Blog",
+    "partners": "Partners",
+    "helpCenter": "Help Center",
+    "apiDocs": "API Docs",
+    "status": "Status",
+    "contact": "Contact",
+    "terms": "Terms of Service",
+    "privacy": "Privacy Policy",
+    "security": "Security",
+    "transportTerms": "Transport Terms"
+  },
+  "Floating": {
+    "search": "Track",
+    "quote": "Get Quote"
+  },
+  "Sidebar": {
+    "dashboard": "Dashboard",
+    "overview": "Overview",
+    "controlTower": "Control Tower",
+    "analytics": "Analytics",
+    "shipments": "Shipments",
+    "allShipments": "All Shipments",
+    "booking": "Booking",
+    "orders": "Orders",
+    "orderManagement": "Order Management",
+    "consolidation": "Consolidation",
+    "tracking": "Tracking",
+    "finance": "Finance",
+    "customs": "Customs",
+    "insurance": "Insurance",
+    "tradeFinance": "Trade Finance",
+    "intelligence": "Intelligence",
+    "aiAnalytics": "AI Analytics",
+    "aiQuote": "AI Quote",
+    "developerApi": "Developer API",
+    "esg": "ESG",
+    "carbonControl": "Carbon Control",
+    "partners": "Partners",
+    "marketing": "Marketing",
+    "fulfillment": "Fulfillment",
+    "changelog": "Changelog",
+    "support": "Support",
+    "settings": "Settings",
+    "menu": "Menu"
+  },
+  "Shipment": {
+    "id": "Shipment ID",
+    "origin": "Origin",
+    "destination": "Destination",
+    "eta": "ETA",
+    "smartContract": "Smart Contract",
+    "fundsReleased": "Funds Released",
+    "confirmDelivery": "Confirm Delivery & Unlock Funds"
+  },
+  "Common": {
+    "close": "Close",
+    "searchPlaceholder": "Search by B/L or Tracking No.",
+    "search": "Search"
+  }
+}

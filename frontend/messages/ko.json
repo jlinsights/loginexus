@@ -1,0 +1,131 @@
+{
+  "HomePage": {
+    "title": "물류의 모든 것,<br /><span class=\"text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400\">하나의 플랫폼</span>에서",
+    "subtitle": "견적부터 부킹, 실시간 추적, 블록체인 정산까지.<br />LogiNexus로 복잡한 국제 물류를 쉽고 간편하게 관리하세요.",
+    "startForFree": "무료로 시작하기",
+    "contactSales": "도입 문의",
+    "blockchainBadge": "블록체인 기반 차세대 물류 플랫폼",
+    "banner": "LogiNexus AI 견적 엔진 베타 출시! 실시간 운임 비교를 경험하세요",
+    "start": "지금 시작",
+    "solutions": {
+      "transport": {
+        "title": "운송 솔루션",
+        "ocean": { "title": "해상 FCL/LCL", "desc": "글로벌 주요 항로 실시간 운임 비교 및 예약" },
+        "air": { "title": "항공 특송", "desc": "긴급 화물, 위험물, 냉장 화물 특수 운송" },
+        "trucking": { "title": "복합 운송", "desc": "Sea-Air, Rail-Sea 등 최적 경로 조합" }
+      },
+      "manage": {
+        "title": "기술 플랫폼",
+        "digital": { "title": "실시간 트래킹", "desc": "선박 AIS · IoT 센서 기반 화물 위치 추적" },
+        "tracking": { "title": "블록체인 정산", "desc": "스마트 컨트랙트 기반 에스크로 결제" },
+        "settlement": { "title": "AI 견적 엔진", "desc": "과거 데이터 기반 최적 운임 추천" }
+      },
+      "finance": {
+        "title": "물류 컨설팅",
+        "scf": { "title": "공급망 최적화", "desc": "리드타임 단축 · 재고 최적화 전략 수립" },
+        "insurance": { "title": "통관 자문", "desc": "FTA 활용, HS 코드 분류, 관세 절감" },
+        "payment": { "title": "위험 관리", "desc": "해상 보험, 클레임 처리, 컴플라이언스" }
+      }
+    },
+    "segments": {
+      "shipper": {
+        "title": "화주/수출입 기업을 위한",
+        "desc": "복잡한 물류 프로세스를 자동화하고 물류비를 절감하세요.",
+        "feature1": "운임 비교 견적",
+        "feature2": "화물 실시간 추적",
+        "feature3": "안전한 결제"
+      },
+      "forwarder": {
+        "title": "포워더/물류사를 위한",
+        "desc": "영업을 디지털화하고 운영 효율을 극대화하세요.",
+        "feature1": "고객 관리 CRM",
+        "feature2": "자동화된 운영",
+        "feature3": "글로벌 네트워크"
+      }
+    }
+  },
+  "Navigation": {
+    "product": "제품",
+    "solutions": "솔루션",
+    "pricing": "요금안내",
+    "support": "고객지원",
+    "login": "로그인",
+    "getStarted": "무료 시작하기",
+    "quoteProps": { "label": "견적 관리", "desc": "실시간 운임 비교 및 견적서 발행" },
+    "bookingProps": { "label": "부킹/선적", "desc": "간편한 부킹 요청 및 선적 관리" },
+    "trackingProps": { "label": "화물 추적", "desc": "전 세계 화물 실시간 위치 추적" },
+    "settlementProps": { "label": "정산/청구", "desc": "블록체인 기반 투명한 정산" },
+    "shipperProps": { "label": "화주용", "desc": "제조/유통/무역 기업" },
+    "forwarderProps": { "label": "물류사용", "desc": "포워더/콘솔사/운송사" }
+  },
+  "Footer": {
+    "product": "제품",
+    "company": "회사",
+    "support": "지원",
+    "legal": "법적 고지",
+    "features": "기능 소개",
+    "solutions": "솔루션",
+    "pricing": "요금 안내",
+    "updates": "업데이트",
+    "about": "회사 소개",
+    "careers": "채용",
+    "blog": "블로그",
+    "partners": "제휴 문의",
+    "helpCenter": "도움말 센터",
+    "apiDocs": "API 문서",
+    "status": "상태",
+    "contact": "문의하기",
+    "terms": "이용약관",
+    "privacy": "개인정보처리방침",
+    "security": "보안",
+    "transportTerms": "운송약관"
+  },
+  "Floating": {
+    "search": "운송 조회",
+    "quote": "견적 요청"
+  },
+  "Sidebar": {
+    "dashboard": "대시보드",
+    "overview": "개요",
+    "controlTower": "관제탑",
+    "analytics": "분석",
+    "shipments": "선적 관리",
+    "allShipments": "전체 선적",
+    "booking": "부킹",
+    "orders": "발주 관리",
+    "orderManagement": "발주 현황",
+    "consolidation": "혼적(Consol) 관리",
+    "tracking": "화물 추적",
+    "finance": "재무/정산",
+    "customs": "통관 관리",
+    "insurance": "적하보험",
+    "tradeFinance": "무역 금융",
+    "intelligence": "인텔리전스",
+    "aiAnalytics": "AI 분석",
+    "aiQuote": "AI 견적",
+    "developerApi": "개발자 API",
+    "esg": "ESG 경영",
+    "carbonControl": "탄소 관리",
+    "partners": "파트너",
+    "marketing": "마케팅",
+    "fulfillment": "풀필먼트",
+    "changelog": "변경 이력",
+    "support": "고객 지원",
+    "settings": "설정",
+    "menu": "메뉴"
+  },
+  "Shipment": {
+    "id": "운송 ID",
+    "origin": "출발지",
+    "destination": "도착지",
+    "eta": "도착 예정일",
+    "smartContract": "스마트 컨트랙트",
+    "fundsReleased": "자금 지급 완료",
+    "confirmDelivery": "배송 확인 및 자금 지급"
+  },
+  "Common": {
+    "close": "닫기",
+    "searchPlaceholder": "B/L 또는 Tracking 번호로 조회",
+    "search": "조회"
+  }
+}

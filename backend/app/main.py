@@ -1,31 +1,61 @@
+import asyncio
+import logging
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.middleware import TenantMiddleware
 from app.api.api import api_router
 from app.database import engine, Base
-from app import models # Ensure models are imported so metadata is registered
+from app.services.escrow_sync import EscrowEventSync
+from app import models  # Ensure models are imported so metadata is registered
+
+logger = logging.getLogger(__name__)
 
 # Create Tables (for dev usage)
 # Base.metadata.create_all(bind=engine)  # Disabled in favor of Alembic migrations
 
-app = FastAPI(title="LogiNexus API")
 
-# Middleware
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup: launch escrow event sync background task
+    sync = EscrowEventSync()
+    task = asyncio.create_task(sync.start())
+    logger.info("Escrow event sync background task scheduled")
+    yield
+    # Shutdown: cancel background task
+    task.cancel()
+    try:
+        await task
+    except asyncio.CancelledError:
+        pass
+
+
+app = FastAPI(title="LogiNexus API", lifespan=lifespan)
+
+# Middleware (order matters: last added = outermost = runs first)
+# TenantMiddleware runs AFTER CORS, so CORS headers are always set
+app.add_middleware(TenantMiddleware)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # In prod, set to specific domains
+    allow_origins=[
+        "http://localhost:3000",
+        "https://loginexus.vercel.app",
+        "https://loginexus.com"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-app.add_middleware(TenantMiddleware)
 
 # Include Router
 app.include_router(api_router, prefix="/api")
 
+
 @app.get("/")
 def read_root():
     return {"message": "Welcome to LogiNexus API"}
+
 
 if __name__ == "__main__":
     import uvicorn

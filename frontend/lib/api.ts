@@ -65,4 +65,131 @@ export const deliverShipment = async (id: string): Promise<Shipment> => {
     return fetchShipment(id);
 };
 
+// --- Escrow API ---
+
+export interface EscrowResponse {
+    id: string;
+    shipment_id: string;
+    escrow_contract_address: string | null;
+    buyer_wallet_address: string;
+    seller_wallet_address: string;
+    amount_usdc: number;
+    status: string;
+    chain_id: number | null;
+    is_locked: boolean;
+    tx_hash_deposit: string | null;
+    tx_hash_release: string | null;
+    tx_hash_dispute: string | null;
+    tx_hash_refund: string | null;
+    funded_at: string | null;
+    resolved_at: string | null;
+    created_at: string | null;
+    updated_at: string | null;
+}
+
+export interface EscrowCreate {
+    shipment_id: string;
+    buyer_wallet_address: string;
+    seller_wallet_address: string;
+    amount_usdc: number;
+    escrow_contract_address: string;
+    chain_id?: number;
+}
+
+export const createEscrow = async (data: EscrowCreate): Promise<EscrowResponse> => {
+    const response = await api.post<EscrowResponse>('/escrows/', data);
+    return response.data;
+};
+
+export const fetchEscrow = async (id: string): Promise<EscrowResponse> => {
+    const response = await api.get<EscrowResponse>(`/escrows/${id}`);
+    return response.data;
+};
+
+export const fetchEscrowByShipment = async (shipmentId: string): Promise<EscrowResponse> => {
+    const response = await api.get<EscrowResponse>(`/escrows/shipment/${shipmentId}`);
+    return response.data;
+};
+
+export const syncEscrow = async (id: string): Promise<EscrowResponse> => {
+    const response = await api.post<EscrowResponse>(`/escrows/${id}/sync`);
+    return response.data;
+};
+
+// --- Analytics API ---
+
+export interface AnalyticsSummary {
+    total_shipments: number;
+    in_transit: number;
+    delivered: number;
+    booked: number;
+    on_time_rate: number;
+    avg_transit_days: number;
+}
+
+export interface VolumeDataPoint {
+    date: string;
+    count: number;
+    status_booked: number;
+    status_in_transit: number;
+    status_delivered: number;
+}
+
+export interface StatusDistribution {
+    status: string;
+    count: number;
+    percentage: number;
+}
+
+export interface RoutePerformance {
+    origin: string;
+    destination: string;
+    shipment_count: number;
+    avg_transit_days: number;
+    on_time_rate: number;
+}
+
+export interface EscrowStatusBreakdown {
+    status: string;
+    count: number;
+    volume_usdc: number;
+}
+
+export interface EscrowAnalyticsSummary {
+    total_volume_usdc: number;
+    escrow_count: number;
+    status_breakdown: EscrowStatusBreakdown[];
+}
+
+interface AnalyticsParams {
+    start_date?: string;
+    end_date?: string;
+    granularity?: string;
+}
+
+export const fetchAnalyticsSummary = async (params?: AnalyticsParams): Promise<AnalyticsSummary> => {
+    const response = await api.get<AnalyticsSummary>('/analytics/summary', { params });
+    return response.data;
+};
+
+export const fetchAnalyticsVolume = async (params?: AnalyticsParams): Promise<VolumeDataPoint[]> => {
+    const response = await api.get<VolumeDataPoint[]>('/analytics/volume', { params });
+    return response.data;
+};
+
+export const fetchStatusDistribution = async (params?: AnalyticsParams): Promise<StatusDistribution[]> => {
+    const response = await api.get<StatusDistribution[]>('/analytics/status-distribution', { params });
+    return response.data;
+};
+
+export const fetchRoutePerformance = async (params?: AnalyticsParams): Promise<RoutePerformance[]> => {
+    const response = await api.get<RoutePerformance[]>('/analytics/route-performance', { params });
+    return response.data;
+};
+
+export const fetchEscrowAnalyticsSummary = async (params?: AnalyticsParams): Promise<EscrowAnalyticsSummary> => {
+    const response = await api.get<EscrowAnalyticsSummary>('/analytics/escrow-summary', { params });
+    return response.data;
+};
+
 export default api;

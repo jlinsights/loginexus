@@ -42,9 +42,16 @@ class PaymentEscrow(Base):
     buyer_wallet_address = Column(String, nullable=False)
     seller_wallet_address = Column(String, nullable=False)
     amount_usdc = Column(Numeric(20, 6), nullable=False)
+    status = Column(String, default="created")  # created|funded|released|disputed|refunded
+    chain_id = Column(Integer, default=11155111)  # Sepolia
     is_locked = Column(Boolean, default=True)
     tx_hash_deposit = Column(String)
     tx_hash_release = Column(String)
+    tx_hash_dispute = Column(String)
+    tx_hash_refund = Column(String)
+    funded_at = Column(DateTime(timezone=True))
+    resolved_at = Column(DateTime(timezone=True))
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 
 class AuditLog(Base):

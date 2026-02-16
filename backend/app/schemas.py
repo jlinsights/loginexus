@@ -56,5 +56,83 @@ class TenantCreate(TenantBase):
 class TenantResponse(TenantBase):
     id: UUID
     created_at: Optional[datetime] = None
-    
+
     model_config = ConfigDict(from_attributes=True)
+
+# --- Escrow Schemas ---
+
+class EscrowStatus(str, Enum):
+    CREATED = "created"
+    FUNDED = "funded"
+    RELEASED = "released"
+    DISPUTED = "disputed"
+    REFUNDED = "refunded"
+
+class EscrowCreate(BaseModel):
+    shipment_id: UUID
+    buyer_wallet_address: str
+    seller_wallet_address: str
+    amount_usdc: float
+    escrow_contract_address: str
+    chain_id: Optional[int] = 11155111
+
+class EscrowResponse(BaseModel):
+    id: UUID
+    shipment_id: UUID
+    escrow_contract_address: Optional[str] = None
+    buyer_wallet_address: str
+    seller_wallet_address: str
+    amount_usdc: float
+    status: str
+    chain_id: Optional[int] = None
+    is_locked: bool
+    tx_hash_deposit: Optional[str] = None
+    tx_hash_release: Optional[str] = None
+    tx_hash_dispute: Optional[str] = None
+    tx_hash_refund: Optional[str] = None
+    funded_at: Optional[datetime] = None
+    resolved_at: Optional[datetime] = None
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+# --- Analytics Schemas ---
+
+class AnalyticsSummary(BaseModel):
+    total_shipments: int
+    in_transit: int
+    delivered: int
+    booked: int
+    on_time_rate: float
+    avg_transit_days: float
+
+class VolumeDataPoint(BaseModel):
+    date: str
+    count: int
+    status_booked: int
+    status_in_transit: int
+    status_delivered: int
+
+class StatusDistribution(BaseModel):
+    status: str
+    count: int
+    percentage: float
+
+class RoutePerformance(BaseModel):
+    origin: str
+    destination: str
+    shipment_count: int
+    avg_transit_days: float
+    on_time_rate: float
+
+class EscrowStatusBreakdown(BaseModel):
+    status: str
+    count: int
+    volume_usdc: float
+
+class EscrowSummary(BaseModel):
+    total_volume_usdc: float
+    escrow_count: int
+    status_breakdown: List[EscrowStatusBreakdown]
