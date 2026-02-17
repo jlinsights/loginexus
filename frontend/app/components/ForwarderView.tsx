@@ -9,10 +9,10 @@ export function ForwarderView() {
             {/* Stats Overview */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 {[
-                    { label: 'Open Quote Requests', value: '12', icon: FileText, color: 'bg-blue-500' },
-                    { label: 'Pending Bookings', value: '5', icon: Clock, color: 'bg-orange-500' },
-                    { label: 'Active Shipments', value: '28', icon: TrendingUp, color: 'bg-emerald-500' },
-                    { label: 'Total Revenue (MTD)', value: '$142.5k', icon: DollarSign, color: 'bg-indigo-500' },
+                    { label: 'Open Quote Requests', value: '12', icon: FileText, color: 'bg-blue-600' },
+                    { label: 'Pending Bookings', value: '5', icon: Clock, color: 'bg-orange-600' },
+                    { label: 'Active Shipments', value: '28', icon: TrendingUp, color: 'bg-emerald-600' },
+                    { label: 'Total Revenue (MTD)', value: '$142.5k', icon: DollarSign, color: 'bg-indigo-600' },
                 ].map((stat) => {
                     const Icon = stat.icon;
                     return (

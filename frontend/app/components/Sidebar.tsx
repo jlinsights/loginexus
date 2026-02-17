@@ -228,17 +228,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
           })}
         </nav>
 
-        <div className="p-6 border-t border-slate-800">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center">
-              <span className="text-xs text-white font-bold">AD</span>
-            </div>
-            <div>
-              <div className="text-sm font-medium text-white">Admin User</div>
-              <div className="text-xs text-slate-500 hover:text-slate-300 cursor-pointer">View Profile</div>
-            </div>
-          </div>
-        </div>
+
       </div>
     </>
   );

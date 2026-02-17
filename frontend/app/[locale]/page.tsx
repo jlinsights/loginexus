@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Link } from '@/i18n/routing'
 import LanguageToggle from '@/app/components/LanguageToggle'
+import { ThemeToggle } from '@/app/components/ThemeToggle'
 import {
   Ship, Plane, Truck, Package, Search,
   ArrowRight, ChevronDown, ChevronLeft, ChevronRight, Globe, Shield, BarChart3,
@@ -15,6 +16,9 @@ import {
   Calculator, Receipt, Building2,
 } from 'lucide-react'
 import dynamic from 'next/dynamic'
+import Image from 'next/image'
+import {useTranslations} from 'next-intl';
+import Newsletter from '@/app/components/Newsletter'
 
 const LandingHeroMap = dynamic(() => import('@/app/components/LandingHeroMap').then(mod => mod.LandingHeroMap), {
   ssr: false,
@@ -99,8 +103,6 @@ function AnimatedStat({ value, suffix, label, decimal }: { value: number; suffix
 
 /* ───────── main component ───────── */
 
-import {useTranslations} from 'next-intl';
-
 export default function LandingPage() {
   const t = useTranslations();
   const [solutionTab, setSolutionTab] = useState('transport')
@@ -110,10 +112,34 @@ export default function LandingPage() {
   const [testimonialIdx, setTestimonialIdx] = useState(0)
 
   const SERVICES = [
-    { icon: Ship, title: t('HomePage.features.transport'), desc: 'FCL / LCL', color: '#3B82F6' },
-    { icon: Plane, title: 'Air Freight', desc: 'Urgent / Special', color: '#8B5CF6' },
-    { icon: Truck, title: 'Inland', desc: 'Pick-up & Delivery', color: '#F59E0B' },
-    { icon: Package, title: 'Value Added', desc: 'Customs / Insurance', color: '#10B981' },
+    { 
+      img: '/assets/3d/ocean-fcl.png', 
+      title: t('HomePage.features.transport'), 
+      desc: 'FCL / LCL', 
+      color: '#3B82F6',
+      alt: 'Ocean Freight'
+    },
+    { 
+      img: '/assets/3d/air-freight.png', 
+      title: 'Air Freight', 
+      desc: 'Urgent / Special', 
+      color: '#8B5CF6',
+      alt: 'Air Freight'
+    },
+    { 
+      img: '/assets/3d/rail-freight.png', 
+      title: 'Inland', 
+      desc: 'Pick-up & Delivery', 
+      color: '#F59E0B',
+      alt: 'Inland Transport'
+    },
+    { 
+      img: '/assets/3d/specialized.png', 
+      title: 'Value Added', 
+      desc: 'Customs / Insurance', 
+      color: '#10B981',
+      alt: 'Value Added Services'
+    },
   ]
 
   const WORKFLOW = [
@@ -263,8 +289,7 @@ export default function LandingPage() {
   const navTop = showBanner ? 'top-10' : 'top-0'
 
   return (
-    <div className="min-h-screen bg-white text-slate-900" style={{ fontFamily: '"Pretendard Variable", Pretendard, -apple-system, system-ui, sans-serif' }}>
-
+    <div className="min-h-screen bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100" style={{ fontFamily: '"Pretendard Variable", Pretendard, -apple-system, system-ui, sans-serif' }}>
       {/* ═══ ANNOUNCEMENT BANNER ═══ (Flexport) */}
       {showBanner && (
         <div className="fixed top-0 inset-x-0 z-[60] bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-600 text-white">
@@ -291,32 +316,32 @@ export default function LandingPage() {
       )}
 
       {/* ═══ PUBLIC NAV ═══ */}
-      <nav className={`fixed ${navTop} inset-x-0 z-50 bg-white/80 backdrop-blur-lg border-b border-slate-200/60 transition-all duration-300`}>
+      <nav className={`fixed ${navTop} inset-x-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg border-b border-slate-200/60 dark:border-slate-800/60 transition-all duration-300`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-8">
             <Link href="/" className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center">
                 <Ship size={18} className="text-white" />
               </div>
-              <span className="text-xl font-bold bg-gradient-to-r from-slate-900 to-slate-600 bg-clip-text text-transparent">LogiNexus</span>
+              <span className="text-xl font-bold bg-gradient-to-r from-slate-900 to-slate-600 dark:from-white dark:to-slate-400 bg-clip-text text-transparent">LogiNexus</span>
             </Link>
             <div className="hidden lg:flex items-center gap-1">
               {NAV_ITEMS.map((item) => (
                 <div key={item.label} className="relative group">
                   {item.href ? (
-                    <Link href={item.href} className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-slate-600 hover:text-slate-900 rounded-lg hover:bg-slate-100 transition-colors">
+                    <Link href={item.href} className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
                       {item.label}
                     </Link>
                   ) : (
-                    <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-slate-600 hover:text-slate-900 rounded-lg hover:bg-slate-100 transition-colors">
+                    <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
                       {item.label}
-                      {item.children && <ChevronDown size={14} className="text-slate-400 group-hover:text-slate-600 transition-transform group-hover:rotate-180" />}
+                      {item.children && <ChevronDown size={14} className="text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300 transition-transform group-hover:rotate-180" />}
                     </button>
                   )}
                   {/* ─── Dropdown ─── */}
                   {item.children && (
                     <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                      <div className="bg-white rounded-2xl shadow-xl border border-slate-200/80 p-4 min-w-[320px]">
+                      <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200/80 dark:border-slate-800/80 p-4 min-w-[320px]">
                         {item.sectionTitle && (
                           <p className="text-[10px] font-semibold text-slate-400 tracking-widest uppercase px-2 mb-2">{item.sectionTitle}</p>
                         )}
@@ -325,16 +350,16 @@ export default function LandingPage() {
                             <Link
                               key={child.label}
                               href={child.href}
-                              className="flex items-start gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition-colors group/item"
+                              className="flex items-start gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group/item"
                             >
                               {child.icon && (
-                                <div className={`w-9 h-9 rounded-lg bg-gradient-to-br ${child.color || 'from-slate-100 to-slate-200'} flex items-center justify-center flex-shrink-0 mt-0.5`}>
+                                <div className={`w-9 h-9 rounded-lg bg-gradient-to-br ${child.color || 'from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-700'} flex items-center justify-center flex-shrink-0 mt-0.5`}>
                                   <child.icon size={16} className="text-white" />
                                 </div>
                               )}
                               <div className="min-w-0">
-                                <div className="text-sm font-semibold text-slate-900 group-hover/item:text-blue-600 transition-colors">{child.label}</div>
-                                {child.desc && <div className="text-xs text-slate-400 mt-0.5 leading-relaxed">{child.desc}</div>}
+                                <div className="text-sm font-semibold text-slate-900 dark:text-slate-100 group-hover/item:text-blue-600 dark:group-hover/item:text-blue-400 transition-colors">{child.label}</div>
+                                {child.desc && <div className="text-xs text-slate-400 dark:text-slate-500 mt-0.5 leading-relaxed">{child.desc}</div>}
                               </div>
                             </Link>
                           ))}
@@ -347,17 +372,19 @@ export default function LandingPage() {
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full border border-slate-200 bg-slate-50 text-sm text-slate-500">
+            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-sm text-slate-500 dark:text-slate-400">
               <Search size={14} />
               <span className="hidden md:inline">{t('Common.searchPlaceholder')}</span>
             </div>
-            <LanguageToggle />
-            <Link href="/dashboard" className="text-sm font-medium text-slate-600 hover:text-slate-900 px-3 py-2">
-              {t('Navigation.login')}
-            </Link>
+
             <Link href="/register" className="text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 px-5 py-2 rounded-full transition-colors shadow-sm">
               {t('Navigation.getStarted')}
             </Link>
+
+            <div className="h-6 w-px bg-slate-200 dark:bg-slate-700 mx-1"></div>
+
+            <LanguageToggle />
+            <ThemeToggle />
           </div>
         </div>
       </nav>
@@ -391,18 +418,23 @@ export default function LandingPage() {
                 </div>
                 {/* Mini tracking search */}
                 <div className="relative max-w-md">
-                  <form onSubmit={(e) => { e.preventDefault(); if(trackingQuery.trim()) window.location.href = `/dashboard?track=${trackingQuery}` }}>
+                  <form onSubmit={(e) => { 
+                      e.preventDefault(); 
+                      if(trackingQuery.trim()) {
+                          window.location.href = `/tracking?number=${trackingQuery.trim()}`;
+                      }
+                  }}>
                     <div className="flex items-center bg-white/10 backdrop-blur-sm border border-white/20 rounded-full overflow-hidden focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent transition-all">
                       <Search size={16} className="ml-4 text-slate-400 flex-shrink-0" />
                       <input
                         type="text"
+                        placeholder={t('HomePage.trackPlaceholder')}
                         value={trackingQuery}
                         onChange={(e) => setTrackingQuery(e.target.value)}
-                        placeholder={t('Common.searchPlaceholder')}
-                        className="flex-1 bg-transparent text-white placeholder:text-slate-500 px-3 py-3 text-sm outline-none"
+                        className="w-full bg-transparent border-none text-white placeholder-slate-400 text-sm px-3 py-3 focus:ring-0 outline-none"
                       />
-                      <button type="submit" className="mr-2 px-4 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium rounded-full transition-colors">
-                        {t('Common.search')}
+                      <button type="submit" className="bg-white/10 hover:bg-white/20 text-white p-2 mr-1 rounded-full transition-colors">
+                        <ArrowRight size={16} />
                       </button>
                     </div>
                   </form>
@@ -410,52 +442,17 @@ export default function LandingPage() {
               </div>
             </Reveal>
 
-            {/* Right: Dashboard Preview */}
-            <Reveal delay={200}>
-              <div className="hidden lg:block relative">
-                <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-slate-800/50 backdrop-blur-sm p-1">
-                  <div className="rounded-xl bg-[#FAF7F2] p-6 space-y-4">
-                    {/* Mock header */}
-                    <div className="flex items-center justify-between">
-                      <span className="font-semibold text-slate-800">Shipment Management</span>
-                      <span className="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-medium">Live Demo</span>
+            {/* Right: Visual/Map */}
+            <div className="relative hidden lg:block h-[500px]">
+              <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 to-cyan-500/10 backdrop-blur-sm rounded-3xl border border-white/10 p-6 flex items-center justify-center">
+                 <div className="text-center">
+                    <div className="w-20 h-20 bg-blue-500/20 rounded-2xl flex items-center justify-center mx-auto mb-4 backdrop-blur-md border border-blue-400/30">
+                      <Globe size={40} className="text-blue-200" />
                     </div>
-                    {/* Status cards row */}
-                    <div className="grid grid-cols-4 gap-2">
-                      {[
-                        { label: 'TOTAL', value: '128', bg: 'bg-blue-500' },
-                        { label: 'IN-TRANSIT', value: '43', bg: 'bg-orange-500' },
-                        { label: 'ARRIVED', value: '72', bg: 'bg-emerald-500' },
-                        { label: 'PENDING', value: '13', bg: 'bg-purple-500' },
-                      ].map(c => (
-                        <div key={c.label} className={`${c.bg} text-white rounded-lg p-3`}>
-                          <div className="text-[10px] font-bold opacity-80">{c.label}</div>
-                          <div className="text-xl font-bold">{c.value}</div>
-                        </div>
-                      ))}
-                    </div>
-                    {/* Mock map */}
-                    <div className="h-32 rounded-lg bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center relative overflow-hidden">
-                      <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23334155\' fill-opacity=\'0.4\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")' }} />
-                      <Globe size={48} className="text-slate-400" />
-                    </div>
-                    {/* Workflow stepper mini */}
-                    <div className="flex items-center gap-1.5">
-                      {['견적', '부킹', '운송', '정산'].map((s, i) => (
-                        <React.Fragment key={s}>
-                          <div className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium ${i <= 1 ? 'bg-blue-100 text-blue-700' : 'bg-slate-100 text-slate-500'}`}>
-                            {i <= 1 && <CheckCircle2 size={12} />} {s}
-                          </div>
-                          {i < 3 && <ChevronDown size={12} className="text-slate-300 rotate-[-90deg]" />}
-                        </React.Fragment>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                {/* Glow */}
-                <div className="absolute -inset-4 bg-gradient-to-r from-blue-600/20 to-cyan-600/20 blur-3xl -z-10 rounded-3xl" />
+                    <p className="text-blue-100 font-medium">{t('HomePage.visualPlaceholder')}</p>
+                 </div>
               </div>
-            </Reveal>
+            </div>
           </div>
         </div>
         {/* Scroll indicator */}
@@ -466,26 +463,44 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ═══ SERVICE CARDS ═══ (PantosNow) */}
-      <section className="py-20 lg:py-28 bg-gradient-to-b from-slate-50 to-white">
+      {/* ═══ FEATURES / SERVICES ═══ */}
+      <section className="py-24 bg-slate-50 dark:bg-slate-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Reveal>
-            <div className="text-center mb-14">
-              <p className="text-sm font-semibold text-blue-600 tracking-wide mb-2">SERVICES</p>
-              <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">원스톱 물류 솔루션</h2>
-              <p className="mt-3 text-slate-500 max-w-2xl mx-auto">국제 운송의 모든 과정을 하나의 플랫폼에서 관리하세요</p>
-            </div>
-          </Reveal>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="text-center max-w-3xl mx-auto mb-20">
+            <h2 className="text-base font-bold text-blue-600 dark:text-blue-400 tracking-wide uppercase mb-3">
+              {t('HomePage.features.badge')}
+            </h2>
+            <p className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-6">
+              {t('HomePage.features.title')}
+            </p>
+            <p className="text-lg text-slate-600 dark:text-slate-400">
+              {t('HomePage.features.subtitle')}
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {SERVICES.map((s, i) => (
-              <Reveal key={s.title} delay={i * 100}>
-                <div className="group relative bg-white rounded-2xl p-6 border border-slate-200 hover:border-transparent hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer">
-                  <div className="w-14 h-14 rounded-xl flex items-center justify-center mb-5 transition-colors" style={{ backgroundColor: `${s.color}15` }}>
-                    <s.icon size={28} style={{ color: s.color }} />
+              <Reveal key={i} delay={i * 100}>
+                <div className="group bg-white dark:bg-slate-900 p-8 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-800 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900 rounded-bl-[60px] -mr-4 -mt-4 opacity-50 group-hover:scale-110 transition-transform" />
+                  
+                  <div className="w-20 h-20 rounded-2xl flex items-center justify-center mb-6 relative z-10 bg-slate-50 dark:bg-slate-800/50 p-2">
+                    <div className="relative w-full h-full">
+                      <Image 
+                        src={s.img} 
+                        alt={s.alt} 
+                        fill 
+                        className="object-contain drop-shadow-md group-hover:scale-110 transition-transform duration-300"
+                      />
+                    </div>
                   </div>
-                  <h3 className="text-lg font-bold text-slate-900 mb-2">{s.title}</h3>
-                  <p className="text-sm text-slate-500 leading-relaxed">{s.desc}</p>
-                  <ArrowRight size={16} className="absolute top-6 right-6 text-slate-300 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
+                  
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">{s.title}</h3>
+                  <p className="text-slate-500 dark:text-slate-400 mb-6">{s.desc}</p>
+                  
+                  <Link href="/services" className="inline-flex items-center gap-2 text-sm font-semibold text-blue-600 dark:text-blue-400 group-hover:gap-3 transition-all">
+                    {t('Common.learnMore')} <ArrowRight size={16} />
+                  </Link>
                 </div>
               </Reveal>
             ))}
@@ -494,26 +509,26 @@ export default function LandingPage() {
       </section>
 
       {/* ═══ WORKFLOW ═══ (PantosNow) */}
-      <section className="py-20 lg:py-28 bg-white">
+      <section className="py-20 lg:py-28 bg-white dark:bg-slate-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Reveal>
             <div className="text-center mb-14">
-              <p className="text-sm font-semibold text-blue-600 tracking-wide mb-2">WORKFLOW</p>
-              <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">4단계로 완성하는 물류</h2>
-              <p className="mt-3 text-slate-500">복잡한 국제 운송, LogiNexus가 간편하게 만들어 드립니다</p>
+              <p className="text-sm font-semibold text-blue-600 dark:text-blue-400 tracking-wide mb-2">WORKFLOW</p>
+              <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">4단계로 완성하는 물류</h2>
+              <p className="mt-3 text-slate-500 dark:text-slate-400">복잡한 국제 운송, LogiNexus가 간편하게 만들어 드립니다</p>
             </div>
           </Reveal>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 relative">
             {/* Connector line (desktop only) */}
-            <div className="hidden lg:block absolute top-14 left-[12.5%] right-[12.5%] h-[2px] bg-gradient-to-r from-blue-500 via-blue-400 to-blue-300" />
+            <div className="hidden lg:block absolute top-14 left-[12.5%] right-[12.5%] h-[2px] bg-gradient-to-r from-blue-500 via-blue-400 to-blue-300 opacity-50 dark:opacity-40" />
             {WORKFLOW.map((w, i) => (
               <Reveal key={w.step} delay={i * 150}>
                 <div className="relative text-center group">
                   <div className="relative z-10 mx-auto w-14 h-14 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-lg shadow-lg shadow-blue-600/30 group-hover:scale-110 transition-transform">
                     {w.step}
                   </div>
-                  <h3 className="mt-5 text-lg font-bold text-slate-900">{w.title}</h3>
-                  <p className="mt-2 text-sm text-slate-500">{w.desc}</p>
+                  <h3 className="mt-5 text-lg font-bold text-slate-900 dark:text-white">{w.title}</h3>
+                  <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">{w.desc}</p>
                 </div>
               </Reveal>
             ))}
@@ -522,19 +537,19 @@ export default function LandingPage() {
       </section>
 
       {/* ═══ TARGET SEGMENT TOGGLE ═══ (TradLinx) */}
-      <section className="py-20 lg:py-28 bg-gradient-to-b from-slate-50 to-white">
+      <section className="py-20 lg:py-28 bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Reveal>
             <div className="text-center mb-10">
-              <p className="text-sm font-semibold text-blue-600 tracking-wide mb-2">FOR YOU</p>
-              <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">맞춤형 솔루션</h2>
+              <p className="text-sm font-semibold text-blue-600 dark:text-blue-400 tracking-wide mb-2">FOR YOU</p>
+              <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">맞춤형 솔루션</h2>
             </div>
           </Reveal>
 
           {/* Toggle */}
           <Reveal delay={100}>
             <div className="flex justify-center mb-12">
-              <div className="inline-flex bg-slate-100 rounded-full p-1">
+              <div className="inline-flex bg-slate-100 dark:bg-slate-800 rounded-full p-1">
                 {[
                   { key: 'shipper' as const, label: '화주 / 수출입 기업' },
                   { key: 'forwarder' as const, label: '포워더 / 물류사' },
@@ -544,8 +559,8 @@ export default function LandingPage() {
                     onClick={() => setSegment(opt.key)}
                     className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all ${
                       segment === opt.key
-                        ? 'bg-white text-blue-600 shadow-md'
-                        : 'text-slate-500 hover:text-slate-700'
+                        ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-300 shadow-md'
+                        : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
                     }`}
                   >
                     {opt.label}
@@ -557,19 +572,19 @@ export default function LandingPage() {
 
           {/* Content */}
           <div className="text-center mb-10">
-            <h3 className="text-2xl font-bold text-slate-900">
-              {seg.headline} <span className="text-blue-600">LogiNexus</span>
+            <h3 className="text-2xl font-bold text-slate-900 dark:text-white">
+              {seg.headline} <span className="text-blue-600 dark:text-blue-400">LogiNexus</span>
             </h3>
           </div>
           <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
             {seg.features.map((f, i) => (
               <Reveal key={f.title} delay={i * 100}>
-                <div className="bg-white rounded-2xl p-6 border border-slate-200 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                  <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center mb-4">
-                    <f.icon size={24} className="text-blue-600" />
+                <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                  <div className="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center mb-4">
+                    <f.icon size={24} className="text-blue-600 dark:text-blue-400" />
                   </div>
-                  <h4 className="font-bold text-slate-900 mb-2">{f.title}</h4>
-                  <p className="text-sm text-slate-500 leading-relaxed">{f.desc}</p>
+                  <h4 className="font-bold text-slate-900 dark:text-white mb-2">{f.title}</h4>
+                  <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">{f.desc}</p>
                 </div>
               </Reveal>
             ))}
@@ -578,12 +593,12 @@ export default function LandingPage() {
       </section>
 
       {/* ═══ SOLUTIONS TABS ═══ (LogiSpot) */}
-      <section className="py-20 lg:py-28 bg-white">
+      <section className="py-20 lg:py-28 bg-white dark:bg-slate-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Reveal>
             <div className="text-center mb-14">
-              <p className="text-sm font-semibold text-blue-600 tracking-wide mb-2">SOLUTIONS</p>
-              <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">통합 물류 솔루션</h2>
+              <p className="text-sm font-semibold text-blue-600 dark:text-blue-400 tracking-wide mb-2">SOLUTIONS</p>
+              <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">통합 물류 솔루션</h2>
             </div>
           </Reveal>
 
@@ -598,7 +613,7 @@ export default function LandingPage() {
                     className={`whitespace-nowrap px-5 py-3 rounded-xl text-sm font-semibold text-left transition-all ${
                       solutionTab === key
                         ? 'bg-blue-600 text-white shadow-md'
-                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                        : 'bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800'
                     }`}
                   >
                     {val.title}
@@ -609,10 +624,10 @@ export default function LandingPage() {
               {/* Cards */}
               <div className="flex-1 grid sm:grid-cols-3 gap-5">
                 {sol.items.map((item) => (
-                  <div key={item.title} className="group bg-slate-50 hover:bg-white rounded-2xl p-6 border border-slate-200 hover:border-blue-200 hover:shadow-lg transition-all duration-300 cursor-pointer">
-                    <h4 className="font-bold text-slate-900 mb-2 group-hover:text-blue-600 transition-colors">{item.title}</h4>
-                    <p className="text-sm text-slate-500 leading-relaxed">{item.desc}</p>
-                    <ArrowRight size={16} className="mt-4 text-slate-300 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
+                  <div key={item.title} className="group bg-slate-50 dark:bg-slate-900 hover:bg-white dark:hover:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 hover:border-blue-200 dark:hover:border-blue-700 hover:shadow-lg transition-all duration-300 cursor-pointer">
+                    <h4 className="font-bold text-slate-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{item.title}</h4>
+                    <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">{item.desc}</p>
+                    <ArrowRight size={16} className="mt-4 text-slate-300 dark:text-slate-600 group-hover:text-blue-600 dark:group-hover:text-blue-400 group-hover:translate-x-1 transition-all" />
                   </div>
                 ))}
               </div>
@@ -622,13 +637,13 @@ export default function LandingPage() {
       </section>
 
       {/* ═══ TESTIMONIALS ═══ (Flexport Customer Stories) */}
-      <section className="py-20 lg:py-28 bg-gradient-to-b from-slate-50 to-white overflow-hidden">
+      <section className="py-20 lg:py-28 bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Reveal>
             <div className="text-center mb-14">
-              <p className="text-sm font-semibold text-blue-600 tracking-wide mb-2">TESTIMONIALS</p>
-              <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">고객이 말하는 LogiNexus</h2>
-              <p className="mt-3 text-slate-500">실제 사용자들의 생생한 후기를 확인하세요</p>
+              <p className="text-sm font-semibold text-blue-600 dark:text-blue-400 tracking-wide mb-2">TESTIMONIALS</p>
+              <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">고객이 말하는 LogiNexus</h2>
+              <p className="mt-3 text-slate-500 dark:text-slate-400">실제 사용자들의 생생한 후기를 확인하세요</p>
             </div>
           </Reveal>
 
@@ -642,14 +657,14 @@ export default function LandingPage() {
                 >
                   {TESTIMONIALS.map((t, i) => (
                     <div key={i} className="w-full flex-shrink-0 px-2">
-                      <div className="bg-white rounded-2xl p-8 lg:p-10 border border-slate-200 shadow-sm">
+                      <div className="bg-white dark:bg-slate-900 rounded-2xl p-8 lg:p-10 border border-slate-200 dark:border-slate-800 shadow-sm">
                         <div className="flex items-center gap-1 mb-4">
                           {Array.from({ length: t.rating }).map((_, j) => (
                             <Star key={j} size={16} className="fill-yellow-400 text-yellow-400" />
                           ))}
                         </div>
-                        <Quote size={32} className="text-blue-100 mb-4" />
-                        <p className="text-lg text-slate-700 leading-relaxed mb-6 font-medium">
+                        <Quote size={32} className="text-blue-100 dark:text-blue-900/40 mb-4" />
+                        <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed mb-6 font-medium">
                           &ldquo;{t.quote}&rdquo;
                         </p>
                         <div className="flex items-center gap-4">
@@ -657,8 +672,8 @@ export default function LandingPage() {
                             {t.name.charAt(0)}
                           </div>
                           <div>
-                            <div className="font-bold text-slate-900">{t.name}</div>
-                            <div className="text-sm text-slate-500">{t.title} · {t.company}</div>
+                            <div className="font-bold text-slate-900 dark:text-white">{t.name}</div>
+                            <div className="text-sm text-slate-500 dark:text-slate-400">{t.title} · {t.company}</div>
                           </div>
                         </div>
                       </div>
@@ -671,7 +686,7 @@ export default function LandingPage() {
               <div className="flex items-center justify-center gap-4 mt-6">
                 <button
                   onClick={() => setTestimonialIdx((prev) => (prev - 1 + TESTIMONIALS.length) % TESTIMONIALS.length)}
-                  className="p-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors"
+                  className="p-2 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 transition-colors"
                 >
                   <ChevronLeft size={18} />
                 </button>
@@ -681,14 +696,14 @@ export default function LandingPage() {
                       key={i}
                       onClick={() => setTestimonialIdx(i)}
                       className={`w-2.5 h-2.5 rounded-full transition-all ${
-                        i === testimonialIdx ? 'bg-blue-600 w-8' : 'bg-slate-300 hover:bg-slate-400'
+                        i === testimonialIdx ? 'bg-blue-600 w-8' : 'bg-slate-300 dark:bg-slate-700 hover:bg-slate-400 dark:hover:bg-slate-600'
                       }`}
                     />
                   ))}
                 </div>
                 <button
                   onClick={() => setTestimonialIdx((prev) => (prev + 1) % TESTIMONIALS.length)}
-                  className="p-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors"
+                  className="p-2 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 transition-colors"
                 >
                   <ChevronRight size={18} />
                 </button>
@@ -743,13 +758,13 @@ export default function LandingPage() {
 
 
       {/* ═══ FREE TOOLS ═══ (Flexport Lead-Gen Strategy) */}
-      <section className="py-20 lg:py-28 bg-gradient-to-b from-slate-50 to-white">
+      <section className="py-20 lg:py-28 bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Reveal>
             <div className="text-center mb-14">
-              <p className="text-sm font-semibold text-emerald-600 tracking-wide mb-2">FREE TOOLS</p>
-              <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">무료 물류 도구</h2>
-              <p className="mt-3 text-slate-500 max-w-2xl mx-auto">회원가입 없이 바로 사용할 수 있는 실용적인 물류 도구를 제공합니다</p>
+              <p className="text-sm font-semibold text-emerald-600 dark:text-emerald-400 tracking-wide mb-2">FREE TOOLS</p>
+              <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">무료 물류 도구</h2>
+              <p className="mt-3 text-slate-500 dark:text-slate-400 max-w-2xl mx-auto">회원가입 없이 바로 사용할 수 있는 실용적인 물류 도구를 제공합니다</p>
             </div>
           </Reveal>
 
@@ -763,14 +778,14 @@ export default function LandingPage() {
               <Reveal key={tool.title} delay={i * 100}>
                 <Link
                   href={tool.href}
-                  className="group block bg-white rounded-2xl border border-slate-200 p-6 hover:border-blue-200 hover:shadow-xl transition-all duration-300 h-full"
+                  className="group block bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 hover:border-blue-200 dark:hover:border-blue-700 hover:shadow-xl transition-all duration-300 h-full"
                 >
                   <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${tool.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
                     <tool.icon size={22} className="text-white" />
                   </div>
-                  <h3 className="font-bold text-slate-900 text-lg mb-2 group-hover:text-blue-600 transition-colors">{tool.title}</h3>
-                  <p className="text-sm text-slate-500 leading-relaxed mb-4">{tool.desc}</p>
-                  <span className="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 group-hover:gap-2 transition-all">
+                  <h3 className="font-bold text-slate-900 dark:text-white text-lg mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{tool.title}</h3>
+                  <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed mb-4">{tool.desc}</p>
+                  <span className="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 dark:text-blue-400 group-hover:gap-2 transition-all">
                     사용하기 <ArrowRight size={14} />
                   </span>
                 </Link>
@@ -781,13 +796,13 @@ export default function LandingPage() {
       </section>
 
       {/* ═══ BLOG & NEWS ═══ (TradLinx P1-6.3) */}
-      <section className="py-20 lg:py-28 bg-white">
+      <section className="py-20 lg:py-28 bg-white dark:bg-slate-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Reveal>
             <div className="text-center mb-14">
-              <p className="text-sm font-semibold text-violet-600 tracking-wide mb-2">LATEST INSIGHTS</p>
-              <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">물류 인사이트</h2>
-              <p className="mt-3 text-slate-500 max-w-2xl mx-auto">최신 물류 트렌드, 운영 팁, 규제 변화를 한눈에 확인하세요</p>
+              <p className="text-sm font-semibold text-violet-600 dark:text-violet-400 tracking-wide mb-2">LATEST INSIGHTS</p>
+              <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">물류 인사이트</h2>
+              <p className="mt-3 text-slate-500 dark:text-slate-400 max-w-2xl mx-auto">최신 물류 트렌드, 운영 팁, 규제 변화를 한눈에 확인하세요</p>
             </div>
           </Reveal>
 
@@ -798,13 +813,13 @@ export default function LandingPage() {
               { cat: '운영 가이드', color: 'from-amber-500 to-orange-500', title: 'LCL 혼적으로 운송비 40% 절감하기: 실전 사례', excerpt: 'Consolidation 전략으로 실제 물류비를 절감한 3개 기업 사례 분석', date: '2026-02-10', readTime: '5분' },
             ].map((post, i) => (
               <Reveal key={post.title} delay={i * 100}>
-                <Link href="/resources/blog" className="group block rounded-2xl border border-slate-200 bg-white overflow-hidden hover:shadow-xl transition-all duration-300 h-full">
+                <Link href="/resources/blog" className="group block rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden hover:shadow-xl transition-all duration-300 h-full">
                   <div className={`h-2 bg-gradient-to-r ${post.color}`} />
                   <div className="p-6">
                     <span className={`inline-block rounded-full bg-gradient-to-r ${post.color} px-3 py-0.5 text-[11px] font-bold text-white mb-3`}>{post.cat}</span>
-                    <h3 className="font-bold text-slate-900 text-lg mb-2 group-hover:text-blue-600 transition-colors leading-snug">{post.title}</h3>
-                    <p className="text-sm text-slate-500 mb-4 line-clamp-2">{post.excerpt}</p>
-                    <div className="flex items-center justify-between text-xs text-slate-400">
+                    <h3 className="font-bold text-slate-900 dark:text-white text-lg mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-snug">{post.title}</h3>
+                    <p className="text-sm text-slate-500 dark:text-slate-400 mb-4 line-clamp-2">{post.excerpt}</p>
+                    <div className="flex items-center justify-between text-xs text-slate-400 dark:text-slate-500">
                       <span>{post.date}</span>
                       <span>{post.readTime} 읽기</span>
                     </div>
@@ -813,66 +828,49 @@ export default function LandingPage() {
               </Reveal>
             ))}
           </div>
-
-          <Reveal delay={300}>
-            <div className="text-center">
-              <Link href="/resources/blog" className="inline-flex items-center gap-2 text-blue-600 font-semibold hover:gap-3 transition-all">
-                블로그 전체 보기 <ArrowRight size={16} />
-              </Link>
-            </div>
-          </Reveal>
         </div>
       </section>
 
-      {/* ═══ CTA BANNER ═══ (PantosNow + LogiSpot) */}
-      <section className="py-20 lg:py-24 bg-gradient-to-r from-blue-600 to-indigo-600 text-white relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '32px 32px' }} />
-        <Reveal>
-          <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">지금 바로 시작하세요</h2>
-            <p className="text-blue-100 text-lg mb-8 max-w-2xl mx-auto">
-              회원가입 후 바로 실시간 운임 조회와 선적 추적을 경험해보세요. 기업 도입 문의도 환영합니다.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/register" className="inline-flex items-center justify-center gap-2 bg-white text-blue-600 font-bold px-8 py-3.5 rounded-full hover:bg-blue-50 transition-colors shadow-lg">
-                무료 회원가입 <ArrowRight size={18} />
-              </Link>
-              <button className="inline-flex items-center justify-center gap-2 border-2 border-white/50 text-white font-semibold px-8 py-3.5 rounded-full hover:bg-white/10 transition-colors">
-                도입 문의하기 <Phone size={16} />
-              </button>
-            </div>
-          </div>
-        </Reveal>
-      </section>
+      {/* ═══ NEWSLETTER ═══ */}
+      <Newsletter />
 
-      {/* ═══ MEGA FOOTER ═══ (LogiSpot) */}
-      <footer className="bg-slate-950 text-slate-400 pt-16 pb-8">
+
+      {/* ═══ FOOTER ═══ */}
+      <footer className="bg-slate-900 text-slate-300 py-16 border-t border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
-            {/* Brand column */}
-            <div className="lg:col-span-1">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 mb-12">
+            <div className="col-span-2 lg:col-span-2">
+              <div className="flex items-center gap-2 mb-6">
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center">
                   <Ship size={18} className="text-white" />
                 </div>
-                <span className="text-lg font-bold text-white">LogiNexus</span>
+                <span className="text-xl font-bold text-white">LogiNexus</span>
               </div>
-              <p className="text-sm leading-relaxed mb-4">차세대 블록체인 물류 플랫폼</p>
-              <div className="flex gap-3 text-slate-500">
-                <Mail size={18} className="hover:text-blue-400 cursor-pointer transition-colors" />
-                <Phone size={18} className="hover:text-blue-400 cursor-pointer transition-colors" />
-                <Headphones size={18} className="hover:text-blue-400 cursor-pointer transition-colors" />
+              <p className="text-slate-400 text-sm leading-relaxed mb-6 max-w-xs">
+                {t('Footer.desc')}
+              </p>
+              <div className="flex gap-4">
+                {/* Social icons */}
+                {[
+                  { icon: Globe, href: '#' },
+                  { icon: Mail, href: '#' },
+                ].map((social, i) => (
+                  <a key={i} href={social.href} className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-slate-700 hover:text-white transition-colors">
+                    <social.icon size={16} />
+                  </a>
+                ))}
               </div>
             </div>
 
-            {/* Link columns */}
             {FOOTER_LINKS.map((section) => (
               <div key={section.title}>
-                <h4 className="text-sm font-semibold text-white mb-4">{section.title}</h4>
-                <ul className="space-y-2.5">
+                <h4 className="font-bold text-white mb-4">{section.title}</h4>
+                <ul className="space-y-2">
                   {section.links.map((link) => (
                     <li key={link.label}>
-                      <Link href={link.href} className="text-sm hover:text-white transition-colors">{link.label}</Link>
+                      <Link href={link.href} className="text-sm text-slate-400 hover:text-white transition-colors">
+                        {link.label}
+                      </Link>
                     </li>
                   ))}
                 </ul>
@@ -880,36 +878,18 @@ export default function LandingPage() {
             ))}
           </div>
 
-          {/* Bottom bar */}
-          <div className="border-t border-slate-800 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-xs text-slate-600">© 2026 LogiNexus. All rights reserved.</p>
-            <div className="flex items-center gap-4 text-xs text-slate-600">
-              <Link href="#" className="hover:text-slate-400 transition-colors">{t('Footer.terms')}</Link>
-              <Link href="#" className="hover:text-slate-400 transition-colors">{t('Footer.privacy')}</Link>
-              <Link href="#" className="hover:text-slate-400 transition-colors">{t('Footer.transportTerms')}</Link>
+          <div className="pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-xs text-slate-500">
+              &copy; {new Date().getFullYear()} LogiNexus Inc. All rights reserved.
+            </p>
+            <div className="flex gap-6">
+              <Link href="/terms" className="text-xs text-slate-500 hover:text-white transition-colors">{t('Footer.terms')}</Link>
+              <Link href="/privacy" className="text-xs text-slate-500 hover:text-white transition-colors">{t('Footer.privacy')}</Link>
+              <Link href="/cookies" className="text-xs text-slate-500 hover:text-white transition-colors">Cookies</Link>
             </div>
           </div>
         </div>
       </footer>
-
-      {/* ═══ FLOATING ACTION BAR ═══ (LogiSpot) */}
-      <div className="fixed right-4 bottom-8 z-40 flex flex-col gap-2">
-        {[
-          { icon: Search, label: t('Floating.search'), bg: 'bg-blue-600 hover:bg-blue-700', action: undefined },
-          { icon: FileText, label: t('Floating.quote'), bg: 'bg-indigo-600 hover:bg-indigo-700', action: undefined },
-        ].map((btn) => (
-          <button
-            key={btn.label}
-            onClick={btn.action}
-            className={`group flex items-center gap-2 ${btn.bg} text-white rounded-full pl-3 pr-4 py-2.5 shadow-lg transition-all hover:shadow-xl hover:-translate-y-0.5`}
-          >
-            <btn.icon size={16} />
-            <span className="text-xs font-semibold">{btn.label}</span>
-          </button>
-        ))}
-      </div>
-
-
     </div>
   )
 }

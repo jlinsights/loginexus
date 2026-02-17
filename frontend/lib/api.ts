@@ -59,6 +59,11 @@ export const fetchShipment = async (id: string): Promise<Shipment> => {
     return response.data;
 };
 
+export const fetchShipmentByTracking = async (trackingNumber: string): Promise<Shipment> => {
+    const response = await api.get<Shipment>(`/shipments/tracking/${trackingNumber}`);
+    return response.data;
+};
+
 export const deliverShipment = async (id: string): Promise<Shipment> => {
     await api.post<Shipment>(`/shipments/${id}/deliver`);
     // Re-fetch to ensure fresh data
@@ -189,6 +194,57 @@ export const fetchRoutePerformance = async (params?: AnalyticsParams): Promise<R
 
 export const fetchEscrowAnalyticsSummary = async (params?: AnalyticsParams): Promise<EscrowAnalyticsSummary> => {
     const response = await api.get<EscrowAnalyticsSummary>('/analytics/escrow-summary', { params });
+    return response.data;
+};
+
+// --- User API ---
+
+export interface User {
+    id: string;
+    email: string;
+    full_name: string;
+    role: string;
+    is_active: boolean;
+    created_at: string;
+}
+
+export interface UserInvite {
+    email: string;
+    full_name: string;
+    role: string;
+}
+
+export const fetchUsers = async (): Promise<User[]> => {
+    const response = await api.get<User[]>('/users/');
+    return response.data;
+};
+
+export const inviteUser = async (data: UserInvite): Promise<User> => {
+    const response = await api.post<User>('/users/invite', data);
+    return response.data;
+};
+
+// --- Rate API ---
+
+export interface RateSubscription {
+    id: string;
+    origin: string;
+    destination: string;
+    target_price?: number;
+    alert_frequency: string;
+    is_active: boolean;
+    created_at: string;
+}
+
+export interface RateSubscriptionCreate {
+    origin: string;
+    destination: string;
+    target_price?: number;
+    alert_frequency: string;
+}
+
+export const createRateSubscription = async (data: RateSubscriptionCreate): Promise<RateSubscription> => {
+    const response = await api.post<RateSubscription>('/rates/subscribe', data);
     return response.data;
 };
 

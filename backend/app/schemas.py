@@ -136,3 +136,46 @@ class EscrowSummary(BaseModel):
     total_volume_usdc: float
     escrow_count: int
     status_breakdown: List[EscrowStatusBreakdown]
+
+# --- User Schemas ---
+
+class UserBase(BaseModel):
+    email: str
+    full_name: str
+    role: str = "member"
+
+class UserCreate(UserBase):
+    tenant_id: UUID
+    password: str
+
+class UserResponse(UserBase):
+    id: UUID
+    tenant_id: UUID
+    is_active: bool
+    created_at: datetime
+    
+    model_config = ConfigDict(from_attributes=True)
+
+class UserInvite(BaseModel):
+    email: str
+    full_name: str
+    role: str = "member"
+
+# --- Rate Subscription Schemas ---
+
+class RateSubscriptionBase(BaseModel):
+    origin: str
+    destination: str
+    target_price: float
+    alert_frequency: str = "daily"
+
+class RateSubscriptionCreate(RateSubscriptionBase):
+    tenant_id: UUID
+
+class RateSubscriptionResponse(RateSubscriptionBase):
+    id: UUID
+    tenant_id: UUID
+    is_active: bool
+    created_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)

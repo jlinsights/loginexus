@@ -6,6 +6,8 @@ import { WagmiProvider } from 'wagmi'
 import { config } from '@/lib/wagmi'
 import { WhitelabelProvider } from '@/app/components/WhitelabelProvider'
 
+import { ThemeProvider } from 'next-themes'
+
 export function Providers(props: { children: ReactNode }) {
   const [queryClient] = useState(() => new QueryClient())
 
@@ -13,9 +15,11 @@ export function Providers(props: { children: ReactNode }) {
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <Suspense fallback={<div className="h-screen w-screen bg-slate-50" />}>
-          <WhitelabelProvider>
-            {props.children}
-          </WhitelabelProvider>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <WhitelabelProvider>
+              {props.children}
+            </WhitelabelProvider>
+          </ThemeProvider>
         </Suspense>
       </QueryClientProvider>
     </WagmiProvider>

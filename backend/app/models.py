@@ -65,3 +65,28 @@ class AuditLog(Base):
     new_value = Column(JSONB)
     performed_by = Column(String)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, server_default=text("uuid_generate_v4()"))
+    tenant_id = Column(UUID(as_uuid=True), ForeignKey("tenants.id", ondelete="CASCADE"))
+    email = Column(String, unique=True, nullable=False)
+    password_hash = Column(String, nullable=False)
+    full_name = Column(String)
+    role = Column(String, default="member") # admin, member, viewer
+    is_active = Column(Boolean, default=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+
+class RateSubscription(Base):
+    __tablename__ = "rate_subscriptions"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, server_default=text("uuid_generate_v4()"))
+    tenant_id = Column(UUID(as_uuid=True), ForeignKey("tenants.id", ondelete="CASCADE"))
+    origin = Column(String, nullable=False)
+    destination = Column(String, nullable=False)
+    target_price = Column(Numeric(10, 2))
+    alert_frequency = Column(String, default="daily") # daily, instant
+    is_active = Column(Boolean, default=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())

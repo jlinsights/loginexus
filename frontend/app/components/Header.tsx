@@ -3,8 +3,6 @@
 import { useAccount, useConnect, useDisconnect, useBalance } from 'wagmi'
 import { useWhitelabel } from './WhitelabelProvider'
 import { formatUnits } from 'viem'
-import LanguageToggle from './LanguageToggle'
-
 import { useTranslations } from 'next-intl'
 
 export function Header() {
@@ -23,7 +21,6 @@ export function Header() {
       </div>
 
       <div className="flex items-center gap-4">
-        <LanguageToggle />
         {isConnected ? (
           <div className="flex items-center gap-4">
             <div className="text-sm text-right">

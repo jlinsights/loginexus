@@ -22,6 +22,18 @@ def read_shipment(shipment_id: str, db: Session = Depends(get_db), request: Requ
         raise HTTPException(status_code=404, detail="Shipment not found")
     return db_shipment
 
+@router.get("/tracking/{tracking_number}", response_model=schemas.Shipment)
+def read_shipment_by_tracking(tracking_number: str, db: Session = Depends(get_db)):
+    # Public endpoint: No tenant check enforced for public tracking (or restrict as needed)
+    # Using 'default' tenant or searching globally depending on requirements.
+    # For now, we search globally or use default if multi-tenancy involves same DB
+    
+    # Try finding by tracking number directly
+    shipment = db.query(models.Shipment).filter(models.Shipment.tracking_number == tracking_number).first()
+    if not shipment:
+         raise HTTPException(status_code=404, detail="Shipment not found")
+    return shipment
+
 @router.post("/", response_model=schemas.ShipmentResponse)
 def create_shipment(shipment: schemas.ShipmentCreate, db: Session = Depends(get_db)):
     # 1. Check Tenant Existence
