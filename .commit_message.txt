@@ -1,1 +1,1 @@
-📝 docs(pdca): architecture-design PDCA 사이클 완료 (93% 매치율, 완료 보고서 생성)
+📦 chore(pdca): architecture-design PDCA 아카이브 완료 (Plan/Design/Analysis/Report → docs/archive/2026-02/)

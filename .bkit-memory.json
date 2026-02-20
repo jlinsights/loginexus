@@ -1,10 +1,12 @@
 {
-  "activeFeatures": ["architecture-design"],
+  "activeFeatures": [],
   "features": {
     "architecture-design": {
-      "phase": "completed",
+      "phase": "archived",
       "startedAt": "2026-02-21",
       "completedAt": "2026-02-21",
+      "archivedAt": "2026-02-21",
+      "archivedTo": "docs/archive/2026-02/architecture-design/",
       "matchRate": 93
     },
     "analytics-reporting": {
