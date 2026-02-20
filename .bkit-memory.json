@@ -2,8 +2,9 @@
   "activeFeatures": ["architecture-design"],
   "features": {
     "architecture-design": {
-      "phase": "check",
+      "phase": "completed",
       "startedAt": "2026-02-21",
+      "completedAt": "2026-02-21",
       "matchRate": 93
     },
     "analytics-reporting": {
