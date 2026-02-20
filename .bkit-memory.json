@@ -1,6 +1,10 @@
 {
-  "activeFeatures": [],
+  "activeFeatures": ["architecture-design"],
   "features": {
+    "architecture-design": {
+      "phase": "plan",
+      "startedAt": "2026-02-21"
+    },
     "analytics-reporting": {
       "phase": "archived",
       "startedAt": "2026-02-16",

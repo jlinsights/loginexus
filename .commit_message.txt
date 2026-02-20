@@ -1,1 +1,1 @@
-🧹 ESLint 106개 에러 전체 수정 (미사용 import/변수 제거, @ts-ignore 교체, any 타입 수정, ESLint 8 호환 설정)
+📋 PDCA Plan 문서 작성: architecture-design (인증, API 강화, 관측성, 테스트, 프론트엔드 구조 개선)
