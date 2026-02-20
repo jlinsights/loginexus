@@ -5,10 +5,12 @@
   "primaryFeature": "architecture-design",
   "features": {
     "architecture-design": {
-      "phase": "do",
+      "phase": "check",
       "startedAt": "2026-02-21T00:00:00.000Z",
       "planDoc": "docs/01-plan/features/architecture-design.plan.md",
-      "designDoc": "docs/02-design/features/architecture-design.design.md"
+      "designDoc": "docs/02-design/features/architecture-design.design.md",
+      "analysisDoc": "docs/03-analysis/architecture-design.analysis.md",
+      "matchRate": 93
     }
   },
   "pipeline": {
