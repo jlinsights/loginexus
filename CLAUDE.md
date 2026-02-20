@@ -56,8 +56,9 @@ If `NODE_ENV=development` is set in your shell environment, `next build` will fa
 │       ├── api/endpoints/      # Route handlers
 │       ├── core/middleware.py   # TenantMiddleware (subdomain extraction)
 │       └── crud/shipment.py    # Shipment DB operations
-├── frontend/           # Next.js 16 App Router
+├── frontend/           # Next.js 14 App Router
 │   ├── app/
+│   │   ├── [locale]/           # i18n support
 │   │   ├── layout.tsx          # Server Component root (metadata, font)
 │   │   ├── client-layout.tsx   # Client Component wrapper (providers + shell UI)
 │   │   ├── providers.tsx       # WagmiProvider > QueryClientProvider > WhitelabelProvider
@@ -68,6 +69,11 @@ If `NODE_ENV=development` is set in your shell environment, `next build` will fa
 │   └── lib/
 │       ├── api.ts              # Axios client + TypeScript interfaces
 │       └── wagmi.ts            # Wagmi config (mainnet, sepolia, ssr: true)
+├── docs/               # Technical documentation & research
+│   ├── 01-plan/        # Strategic & implementation plans
+│   ├── 02-design/      # Design specs & UI/UX research
+│   ├── 03-analysis/    # Technical & data analysis
+│   └── 04-report/      # Performance & final reports
 └── vercel.json         # Routes all requests to frontend/ for Vercel deployment
 ```
 
@@ -107,6 +113,7 @@ Provider chain: `WagmiProvider` > `QueryClientProvider` > `Suspense` > `Whitelab
 ### API Endpoints
 
 All prefixed with `/api`:
+
 - `POST /tenants/` - Register tenant (checks subdomain uniqueness)
 - `GET /tenants/me` - Current tenant from middleware context
 - `GET /shipments/` - List shipments (demo mode: no tenant filter)
@@ -117,16 +124,25 @@ All prefixed with `/api`:
 ## Environment Variables
 
 ### Frontend
+
 - `NEXT_PUBLIC_API_URL` - Backend API base URL (default: `http://localhost:8000/api`)
 
 ### Backend
+
 - `DATABASE_URL` - PostgreSQL connection string (default: `postgresql://jaehong@localhost/loginexus`)
 
 ## Tech Stack
 
-- **Frontend**: Next.js 16.1.6, React 19, TypeScript, Tailwind CSS v4, TanStack Query v5, wagmi v3 + viem, Leaflet, Framer Motion, Lucide icons
+- **Frontend**: Next.js 14.2.14, React 18.3.1, TypeScript, Tailwind CSS v3.4.13, TanStack Query v5, wagmi v2 + viem, Leaflet, Framer Motion, Lucide icons
 - **Backend**: FastAPI, SQLAlchemy (sync), Pydantic v2, PostgreSQL
-- **Deployment**: Vercel (frontend only via vercel.json routing)
+- **Deployment**: Vercel (frontend), Local/Cloud VM (backend)
+
+## Recent Accomplishments
+
+- ✨ **Design Refinements**: Implemented modern Pill-style CTAs, Warm color palette, and Newsletter integration.
+- 🌐 **i18n Implementation**: Full internationalization support (Next-intl) with Korean and English locales.
+- 🔒 **Security & Remediation**: Hardened CORS policies, improved backend error handling, and refactored core logic for reliability.
+- 🎨 **UI Harmonization**: Standardized sidebar, dashboard layouts, and clarified state transitions.
 
 ## Version Control
 

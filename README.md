@@ -24,16 +24,19 @@ LogiNexus is a modern, enterprise-grade logistics management platform designed t
 
 - **💰 Smart Quote System**: Instant freight quote generation.
 - **🤖 AI Assistant**: Integrated Gemini AI for intelligent logistics queries.
+- **🌐 Global Reach**: Full i18n support (Next-intl) for international operations.
+- **✨ Premium UI**: Modern design with Pill CTAs, warm palette, and responsive layouts.
 
 ## 🛠 Tech Stack
 
 ### Frontend (Next.js)
 
-- **Framework**: [Next.js 14](https://nextjs.org/) (App Router)
+- **Framework**: [Next.js 14.2.14](https://nextjs.org/) (App Router)
 - **Language**: [TypeScript](https://www.typescriptlang.org/)
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **Styling**: [Tailwind CSS 3.4.13](https://tailwindcss.com/)
 - **State/Data**: [TanStack Query](https://tanstack.com/query/latest) (React Query)
 - **Maps**: [React Leaflet](https://react-leaflet.js.org/)
+- **i18n**: [Next-intl](https://next-intl-docs.vercel.app/)
 
 ### Backend (FastAPI)
 
@@ -58,11 +61,13 @@ LogiNexus is a modern, enterprise-grade logistics management platform designed t
 │   └── seed_db.py        # Database Seeding Script
 ├── frontend/ (Next.js)
 │   ├── app/
+│   │   ├── [locale]/     # Internationalization (KO/EN)
 │   │   ├── dashboard/    # Main Dashboard Page
 │   │   ├── components/   # UI Components (Map, Tables, Whitelabel)
 │   │   └── register/     # Tenant Registration
 │   ├── lib/              # API Client (Axios)
 │   └── public/
+├── docs/                 # Documentation & Research
 └── docker-compose.yml
 ```
 
