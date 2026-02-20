@@ -40,7 +40,10 @@ export default function ShipmentDashboard() {
 
   const { data: shipments = [], isLoading, isError } = useQuery({
     queryKey: ['shipments'],
-    queryFn: fetchShipments,
+    queryFn: async () => {
+      const res = await fetchShipments();
+      return res.items;
+    },
     refetchInterval: 3000,
   });
 

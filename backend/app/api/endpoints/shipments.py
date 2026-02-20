@@ -4,6 +4,8 @@ from typing import List, Optional
 from ...database import get_db
 from ...crud import shipment as crud_shipment
 from ... import schemas, models
+from ...core.rate_limit import limiter
+from ...core.pagination import PaginationParams, PaginatedResponse
 import uuid
 import base64
 from datetime import datetime
@@ -31,16 +33,17 @@ def calculate_carbon_footprint(weight_kg: float, mode: str, distance_km: float =
     # Emission = Tons * Km * Factor
     return round(weight_tons * distance_km * factor, 2)
 
-@router.get("/", response_model=List[schemas.ShipmentResponse])
-def read_shipments(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+@router.get("/", response_model=PaginatedResponse[schemas.ShipmentResponse])
+def read_shipments(pagination: PaginationParams = Depends(), db: Session = Depends(get_db)):
     # Demo mode: Fetch all shipments without tenant filtering
-    shipments = db.query(models.Shipment).offset(skip).limit(limit).all()
-    
+    total = db.query(models.Shipment).count()
+    shipments = db.query(models.Shipment).offset(pagination.skip).limit(pagination.limit).all()
+
     # Enrichment: Populate blockchain_status from PaymentEscrow
     shipment_ids = [s.id for s in shipments]
     escrows = db.query(models.PaymentEscrow).filter(models.PaymentEscrow.shipment_id.in_(shipment_ids)).all()
     escrow_map = {e.shipment_id: e for e in escrows}
-    
+
     for s in shipments:
         escrow = escrow_map.get(s.id)
         if escrow:
@@ -50,12 +53,13 @@ def read_shipments(skip: int = 0, limit: int = 100, db: Session = Depends(get_db
             elif escrow.status == 'funded' and escrow.is_locked:
                  s.blockchain_status = "LOCKED"
             else:
-                 # created, disputed, refunded, etc.
-                 s.blockchain_status = "UNSECURED" 
+                 s.blockchain_status = "UNSECURED"
         else:
             s.blockchain_status = "NONE"
-            
-    return shipments
+
+    return PaginatedResponse(
+        items=shipments, total=total, skip=pagination.skip, limit=pagination.limit
+    )
 
 @router.get("/{shipment_id}", response_model=schemas.Shipment)
 def read_shipment(shipment_id: str, db: Session = Depends(get_db), request: Request = None):
@@ -106,7 +110,8 @@ def read_shipment_by_tracking(tracking_number: str, db: Session = Depends(get_db
     return shipment
 
 @router.post("/", response_model=schemas.ShipmentResponse)
-def create_shipment(shipment: schemas.ShipmentCreate, db: Session = Depends(get_db)):
+@limiter.limit("100/minute")
+def create_shipment(request: Request, shipment: schemas.ShipmentCreate, db: Session = Depends(get_db)):
     # 1. Check Tenant Existence
     tenant = db.query(models.Tenant).filter(models.Tenant.id == shipment.tenant_id).first()
     if not tenant:
@@ -148,14 +153,16 @@ def create_shipment(shipment: schemas.ShipmentCreate, db: Session = Depends(get_
     return new_shipment
 
 @router.post("/{tracking_number}/pod")
+@limiter.limit("100/minute")
 async def upload_pod(
+    request: Request,
     tracking_number: str,
     background_tasks: BackgroundTasks,
     signature: str = Form(...),
     latitude: str = Form(...),
     longitude: str = Form(...),
     photos: List[UploadFile] = File(default=[]),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ):
     # 1. Find Shipment
     shipment = db.query(models.Shipment).filter(models.Shipment.tracking_number == tracking_number).first()
@@ -191,9 +198,6 @@ async def upload_pod(
         )
         db.add(log)
         db.commit()
-    except Exception as e:
-        print(f"Failed to audit POD: {e}")
-
     except Exception as e:
         print(f"Failed to audit POD: {e}")
 

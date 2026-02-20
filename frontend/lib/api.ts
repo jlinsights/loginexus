@@ -9,6 +9,84 @@ const api = axios.create({
     },
 });
 
+// --- Auth Token Management ---
+
+let accessToken: string | null = null;
+
+export const setAccessToken = (token: string | null) => {
+    accessToken = token;
+    if (token) {
+        localStorage.setItem('access_token', token);
+    } else {
+        localStorage.removeItem('access_token');
+    }
+};
+
+export const getAccessToken = (): string | null => {
+    if (accessToken) return accessToken;
+    if (typeof window !== 'undefined') {
+        accessToken = localStorage.getItem('access_token');
+    }
+    return accessToken;
+};
+
+// Request interceptor: attach token
+api.interceptors.request.use((config) => {
+    const token = getAccessToken();
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+});
+
+// Response interceptor: handle 401
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response?.status === 401) {
+            setAccessToken(null);
+            if (typeof window !== 'undefined') {
+                window.location.href = '/login';
+            }
+        }
+        return Promise.reject(error);
+    }
+);
+
+// --- Auth API ---
+
+export interface LoginRequest {
+    username: string; // email
+    password: string;
+}
+
+export interface LoginResponse {
+    access_token: string;
+    token_type: string;
+}
+
+export const login = async (data: LoginRequest): Promise<LoginResponse> => {
+    const formData = new URLSearchParams();
+    formData.append('username', data.username);
+    formData.append('password', data.password);
+    const response = await api.post<LoginResponse>('/v1/auth/login', formData, {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    });
+    setAccessToken(response.data.access_token);
+    return response.data;
+};
+
+export const logout = () => {
+    setAccessToken(null);
+};
+
+export const fetchMe = async (): Promise<User> => {
+    const response = await api.get<User>('/v1/auth/me');
+    return response.data;
+};
+
+// --- Interfaces ---
+
 export interface TenantCreate {
     name: string;
     subdomain: string;
@@ -21,7 +99,6 @@ export interface TenantResponse extends TenantCreate {
     created_at: string;
 }
 
-// Shipment Interface
 export interface Shipment {
     id: string;
     tracking_number: string;
@@ -33,45 +110,52 @@ export interface Shipment {
     longitude: number | null;
     eta: string | null;
     tenant_id: string;
-    // Green Supply Chain
     carbon_emission?: number;
     is_green_certified?: boolean;
     transport_mode?: string;
     escrow_id?: string;
 }
 
+export interface PaginatedResponse<T> {
+    items: T[];
+    total: number;
+    skip: number;
+    limit: number;
+}
+
 // --- Tenant API ---
 export const registerTenant = async (data: TenantCreate): Promise<TenantResponse> => {
-    const response = await api.post<TenantResponse>('/tenants/', data);
+    const response = await api.post<TenantResponse>('/v1/tenants/', data);
     return response.data;
 };
 
 export const createTenant = registerTenant;
 
 export const fetchCurrentTenant = async (): Promise<TenantResponse> => {
-    const response = await api.get<TenantResponse>('/tenants/me');
+    const response = await api.get<TenantResponse>('/v1/tenants/me');
     return response.data;
 };
 
 // --- Shipment API ---
-export const fetchShipments = async (): Promise<Shipment[]> => {
-    const response = await api.get<Shipment[]>('/shipments/');
+export const fetchShipments = async (skip = 0, limit = 50): Promise<PaginatedResponse<Shipment>> => {
+    const response = await api.get<PaginatedResponse<Shipment>>('/v1/shipments/', {
+        params: { skip, limit },
+    });
     return response.data;
 };
 
 export const fetchShipment = async (id: string): Promise<Shipment> => {
-    const response = await api.get<Shipment>(`/shipments/${id}`);
+    const response = await api.get<Shipment>(`/v1/shipments/${id}`);
     return response.data;
 };
 
 export const fetchShipmentByTracking = async (trackingNumber: string): Promise<Shipment> => {
-    const response = await api.get<Shipment>(`/shipments/tracking/${trackingNumber}`);
+    const response = await api.get<Shipment>(`/v1/shipments/tracking/${trackingNumber}`);
     return response.data;
 };
 
 export const deliverShipment = async (id: string): Promise<Shipment> => {
-    await api.post<Shipment>(`/shipments/${id}/deliver`);
-    // Re-fetch to ensure fresh data
+    await api.post<Shipment>(`/v1/shipments/${id}/deliver`);
     return fetchShipment(id);
 };
 
@@ -107,27 +191,27 @@ export interface EscrowCreate {
 }
 
 export const createEscrow = async (data: EscrowCreate): Promise<EscrowResponse> => {
-    const response = await api.post<EscrowResponse>('/escrows/', data);
+    const response = await api.post<EscrowResponse>('/v1/escrows/', data);
     return response.data;
 };
 
 export const fetchEscrow = async (id: string): Promise<EscrowResponse> => {
-    const response = await api.get<EscrowResponse>(`/escrows/${id}`);
+    const response = await api.get<EscrowResponse>(`/v1/escrows/${id}`);
     return response.data;
 };
 
 export const fetchEscrowByShipment = async (shipmentId: string): Promise<EscrowResponse> => {
-    const response = await api.get<EscrowResponse>(`/escrows/shipment/${shipmentId}`);
+    const response = await api.get<EscrowResponse>(`/v1/escrows/shipment/${shipmentId}`);
     return response.data;
 };
 
 export const syncEscrow = async (id: string): Promise<EscrowResponse> => {
-    const response = await api.post<EscrowResponse>(`/escrows/${id}/sync`);
+    const response = await api.post<EscrowResponse>(`/v1/escrows/${id}/sync`);
     return response.data;
 };
 
 export const simulatePayment = async (id: string): Promise<EscrowResponse> => {
-    const response = await api.post<EscrowResponse>(`/escrows/${id}/simulate_payment`);
+    const response = await api.post<EscrowResponse>(`/v1/escrows/${id}/simulate_payment`);
     return response.data;
 };
 
@@ -183,27 +267,27 @@ interface AnalyticsParams {
 }
 
 export const fetchAnalyticsSummary = async (params?: AnalyticsParams): Promise<AnalyticsSummary> => {
-    const response = await api.get<AnalyticsSummary>('/analytics/summary', { params });
+    const response = await api.get<AnalyticsSummary>('/v1/analytics/summary', { params });
     return response.data;
 };
 
 export const fetchAnalyticsVolume = async (params?: AnalyticsParams): Promise<VolumeDataPoint[]> => {
-    const response = await api.get<VolumeDataPoint[]>('/analytics/volume', { params });
+    const response = await api.get<VolumeDataPoint[]>('/v1/analytics/volume', { params });
     return response.data;
 };
 
 export const fetchStatusDistribution = async (params?: AnalyticsParams): Promise<StatusDistribution[]> => {
-    const response = await api.get<StatusDistribution[]>('/analytics/status-distribution', { params });
+    const response = await api.get<StatusDistribution[]>('/v1/analytics/status-distribution', { params });
     return response.data;
 };
 
 export const fetchRoutePerformance = async (params?: AnalyticsParams): Promise<RoutePerformance[]> => {
-    const response = await api.get<RoutePerformance[]>('/analytics/route-performance', { params });
+    const response = await api.get<RoutePerformance[]>('/v1/analytics/route-performance', { params });
     return response.data;
 };
 
 export const fetchEscrowAnalyticsSummary = async (params?: AnalyticsParams): Promise<EscrowAnalyticsSummary> => {
-    const response = await api.get<EscrowAnalyticsSummary>('/analytics/escrow-summary', { params });
+    const response = await api.get<EscrowAnalyticsSummary>('/v1/analytics/escrow-summary', { params });
     return response.data;
 };
 
@@ -225,12 +309,12 @@ export interface UserInvite {
 }
 
 export const fetchUsers = async (): Promise<User[]> => {
-    const response = await api.get<User[]>('/users/');
+    const response = await api.get<User[]>('/v1/users/');
     return response.data;
 };
 
 export const inviteUser = async (data: UserInvite): Promise<User> => {
-    const response = await api.post<User>('/users/invite', data);
+    const response = await api.post<User>('/v1/users/invite', data);
     return response.data;
 };
 
@@ -254,7 +338,7 @@ export interface RateSubscriptionCreate {
 }
 
 export const createRateSubscription = async (data: RateSubscriptionCreate): Promise<RateSubscription> => {
-    const response = await api.post<RateSubscription>('/rates/subscribe', data);
+    const response = await api.post<RateSubscription>('/v1/rates/subscribe', data);
     return response.data;
 };
 

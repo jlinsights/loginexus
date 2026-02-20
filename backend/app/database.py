@@ -1,19 +1,10 @@
-import os
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from dotenv import load_dotenv
-
-# Load environment variables from .env.local
-load_dotenv(dotenv_path=".env.local")
-
-# Adjusted to match the running local environment
-SQLALCHEMY_DATABASE_URL = os.getenv(
-    "DATABASE_URL", "postgresql://jaehong@localhost/loginexus"
-)
+from .core.config import settings
 
 # 1. DB Engine Creation
-engine = create_engine(SQLALCHEMY_DATABASE_URL)
+engine = create_engine(settings.DATABASE_URL)
 
 # 2. Session Factory
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

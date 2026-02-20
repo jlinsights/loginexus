@@ -1,10 +1,18 @@
 from fastapi import APIRouter
-from .endpoints import shipments, tenants, escrows, analytics, users, rates
 
+from .endpoints import analytics, auth, escrows, health, rates, shipments, tenants, users
+
+# Versioned router
+v1_router = APIRouter()
+v1_router.include_router(auth.router, prefix="/auth", tags=["auth"])
+v1_router.include_router(shipments.router, prefix="/shipments", tags=["shipments"])
+v1_router.include_router(tenants.router, prefix="/tenants", tags=["tenants"])
+v1_router.include_router(escrows.router, prefix="/escrows", tags=["escrows"])
+v1_router.include_router(analytics.router, prefix="/analytics", tags=["analytics"])
+v1_router.include_router(users.router, prefix="/users", tags=["users"])
+v1_router.include_router(rates.router, prefix="/rates", tags=["rates"])
+
+# Top-level API router
 api_router = APIRouter()
-api_router.include_router(shipments.router, prefix="/shipments", tags=["shipments"])
-api_router.include_router(tenants.router, prefix="/tenants", tags=["tenants"])
-api_router.include_router(escrows.router, prefix="/escrows", tags=["escrows"])
-api_router.include_router(analytics.router, prefix="/analytics", tags=["analytics"])
-api_router.include_router(users.router, prefix="/users", tags=["users"])
-api_router.include_router(rates.router, prefix="/rates", tags=["rates"])
+api_router.include_router(v1_router, prefix="/v1")
+api_router.include_router(health.router, tags=["health"])

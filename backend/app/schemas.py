@@ -175,6 +175,18 @@ class UserInvite(BaseModel):
     full_name: str
     role: str = "member"
 
+# --- Auth Schemas ---
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+
+class TokenPayload(BaseModel):
+    sub: str
+    tenant_id: str
+    role: str
+    exp: int
+
 # --- Rate Subscription Schemas ---
 
 class RateSubscriptionBase(BaseModel):

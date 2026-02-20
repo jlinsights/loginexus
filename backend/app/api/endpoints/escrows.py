@@ -1,15 +1,17 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 from sqlalchemy.sql import func
 from typing import List
 from ...database import get_db
 from ... import schemas, models
+from ...core.rate_limit import limiter
 
 router = APIRouter()
 
 
 @router.post("/", response_model=schemas.EscrowResponse)
-def create_escrow(escrow: schemas.EscrowCreate, db: Session = Depends(get_db)):
+@limiter.limit("100/minute")
+def create_escrow(request: Request, escrow: schemas.EscrowCreate, db: Session = Depends(get_db)):
     shipment = db.query(models.Shipment).filter(
         models.Shipment.id == escrow.shipment_id
     ).first()

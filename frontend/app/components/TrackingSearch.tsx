@@ -15,7 +15,10 @@ export function TrackingSearch() {
 
     const { data: shipments = [] } = useQuery({
         queryKey: ['shipments'],
-        queryFn: fetchShipments,
+        queryFn: async () => {
+            const res = await fetchShipments();
+            return res.items;
+        },
         enabled: query.trim().length > 0,
     });
 

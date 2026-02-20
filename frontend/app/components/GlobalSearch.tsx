@@ -14,7 +14,10 @@ export function GlobalSearch() {
 
     const { data: shipments = [] } = useQuery({
         queryKey: ['shipments'],
-        queryFn: fetchShipments,
+        queryFn: async () => {
+            const res = await fetchShipments();
+            return res.items;
+        },
         enabled: isOpen,
     });
 

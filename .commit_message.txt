@@ -1,1 +1,1 @@
-📋 PDCA Plan 문서 작성: architecture-design (인증, API 강화, 관측성, 테스트, 프론트엔드 구조 개선)
+🏗️ feat(arch): architecture-design Do 단계 구현 (JWT 인증, 구조화 로깅, 속도 제한, API v1 버전관리, 페이지네이션, 에러 핸들링)

@@ -8,7 +8,10 @@ import Link from 'next/link';
 export function ShipmentList() {
     const { data: shipments, isLoading, isError } = useQuery({
         queryKey: ['shipments'],
-        queryFn: fetchShipments,
+        queryFn: async () => {
+            const res = await fetchShipments();
+            return res.items;
+        },
     });
 
     if (isLoading) return <div className="p-4 text-center">Loading shipments...</div>;
