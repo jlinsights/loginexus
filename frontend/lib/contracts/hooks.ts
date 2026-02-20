@@ -5,7 +5,7 @@ import { parseUnits, erc20Abi } from 'viem';
 import EscrowFactoryABI from './abi/EscrowFactory.json';
 import ShipmentEscrowABI from './abi/ShipmentEscrow.json';
 import { CONTRACTS, CHAIN_ID } from './addresses';
-import { STATUS_MAP, type EscrowStatus } from './types';
+import { STATUS_MAP } from './types';
 
 // --- Read Hooks ---
 

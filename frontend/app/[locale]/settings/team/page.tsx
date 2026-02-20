@@ -1,12 +1,10 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useTranslations } from 'next-intl';
 import { fetchUsers, inviteUser, User, UserInvite } from '@/lib/api';
 import { Users, UserPlus, Mail, Shield, CheckCircle2, Clock, X, Loader2 } from 'lucide-react';
 
 export default function TeamSettingsPage() {
-    const t = useTranslations('Settings'); // Assuming Settings namespace exists, otherwise fallback
     const [users, setUsers] = useState<User[]>([]);
     const [loading, setLoading] = useState(true);
     const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
@@ -49,9 +47,10 @@ export default function TeamSettingsPage() {
             setUsers([...users, newUser]);
             setIsInviteModalOpen(false);
             setInviteForm({ email: '', full_name: '', role: 'member' });
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Failed to invite user', err);
-            setError(err.response?.data?.detail || 'Failed to invite user');
+            const apiErr = err as { response?: { data?: { detail?: string } } };
+            setError(apiErr.response?.data?.detail || 'Failed to invite user');
         } finally {
             setIsSubmitting(false);
         }

@@ -2,9 +2,8 @@
 
 import React, { useState } from 'react';
 import {
-  Warehouse, Package, RotateCcw, MapPin, Search,
-  ArrowRight, CheckCircle2, Clock, Truck, ShoppingCart,
-  Filter, TrendingUp,
+  Warehouse, Package, RotateCcw, MapPin,
+  ShoppingCart,
 } from 'lucide-react';
 
 /* ───── mock data ───── */
@@ -79,9 +78,6 @@ const RETURN_STATUS_COLORS: Record<string, string> = {
 
 export default function FulfillmentPage() {
   const [statusFilter, setStatusFilter] = useState<string>('all');
-
-  const totalOrders = ORDERS.length;
-  const shippedToday = ORDERS.filter((o) => o.status === 'shipped' || o.status === 'delivered').length;
 
   const filtered = statusFilter === 'all' ? ORDERS : ORDERS.filter((o) => o.status === statusFilter);
 

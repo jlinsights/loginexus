@@ -36,7 +36,6 @@ export default function ConsolidationPage() {
 
   const selected = orders.filter((o) => o.selected);
   const totalCbm = selected.reduce((s, o) => s + o.cbm, 0);
-  const totalWeight = selected.reduce((s, o) => s + o.weightKg, 0);
   const capacity = FCL_CAPACITY[containerType];
   const utilization = Math.min((totalCbm / capacity) * 100, 100);
 

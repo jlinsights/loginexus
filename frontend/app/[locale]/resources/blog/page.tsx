@@ -2,8 +2,7 @@
 
 import React, { useState } from 'react';
 import {
-  BookOpen, Clock, User, Tag, ArrowRight, Search,
-  TrendingUp, Ship, Plane, FileText, ChevronRight,
+  BookOpen, Clock, User, ArrowRight, Search,
 } from 'lucide-react';
 
 /* ───── data ───── */

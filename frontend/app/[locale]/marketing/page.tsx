@@ -2,9 +2,9 @@
 
 import React, { useState } from 'react';
 import {
-  Megaphone, Target, BarChart3, Users, TrendingUp,
+  Megaphone, Target, BarChart3, TrendingUp,
   ArrowRight, CheckCircle2, Star, Zap, Eye,
-  Building2, Globe, Award, ChevronRight,
+  Building2, Award, ChevronRight,
 } from 'lucide-react';
 
 /* ───── data ───── */

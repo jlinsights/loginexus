@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { createTenant, TenantCreate } from '@/lib/api';
+import { TenantCreate } from '@/lib/api';
 
 export default function SignupPage() {
     interface ApiError {

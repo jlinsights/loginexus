@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import {
   Users, Search, Star, MapPin, Shield, Clock,
   Ship, Plane, Truck, FileCheck, BadgeCheck,
-  ArrowRight, Building2, Globe, MessageSquare,
+  Building2, Globe, MessageSquare,
 } from 'lucide-react';
 
 /* ───── data ───── */

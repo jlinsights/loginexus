@@ -1,3 +1,4 @@
+from fastapi import APIRouter
 from .endpoints import shipments, tenants, escrows, analytics, users, rates
 
 api_router = APIRouter()

@@ -1,9 +1,13 @@
 {
-  "activeFeatures": ["analytics-reporting"],
+  "activeFeatures": [],
   "features": {
     "analytics-reporting": {
-      "phase": "do",
-      "startedAt": "2026-02-16"
+      "phase": "archived",
+      "startedAt": "2026-02-16",
+      "completedAt": "2026-02-20",
+      "archivedAt": "2026-02-20",
+      "archivedTo": "docs/archive/2026-02/analytics-reporting/",
+      "matchRate": 93.3
     },
     "smart-contract-escrow": {
       "phase": "archived",

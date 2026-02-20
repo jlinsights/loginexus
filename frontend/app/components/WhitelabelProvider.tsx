@@ -26,7 +26,7 @@ export const WhitelabelProvider = ({
   children: React.ReactNode;
 }) => {
   // Fetch tenant info from backend (which uses Host header/middleware)
-  const { data: tenant, isLoading } = useQuery({
+  const { data: tenant } = useQuery({
       queryKey: ['currentTenant'],
       queryFn: fetchCurrentTenant,
       retry: false,

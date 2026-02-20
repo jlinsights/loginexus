@@ -21,6 +21,20 @@ class ShipmentBase(BaseModel):
     latitude: Optional[float] = None
     longitude: Optional[float] = None
     container_number: Optional[str] = None
+    
+    # e-POD
+    pod_signature: Optional[str] = None
+    pod_photos: Optional[List[str]] = None
+    pod_location: Optional[dict] = None
+    pod_timestamp: Optional[datetime] = None
+
+    # Green Supply Chain
+    carbon_emission: Optional[float] = 0.0
+    is_green_certified: Optional[bool] = False
+
+    # Blockchain / Escrow
+    blockchain_status: Optional[str] = "NONE" # NONE, LOCKED, RELEASED
+    escrow_id: Optional[UUID] = None
 
 # Properties to receive on creation
 class ShipmentCreate(ShipmentBase):

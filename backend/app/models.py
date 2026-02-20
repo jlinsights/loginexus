@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Boolean, Numeric, DateTime, Text, ForeignKey, Integer
+from sqlalchemy import Column, String, Boolean, Numeric, DateTime, Text, ForeignKey, Integer, Float
 from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.sql import func, text
 from .database import Base
@@ -26,11 +26,24 @@ class Shipment(Base):
     origin = Column(String, nullable=False)
     destination = Column(String, nullable=False)
     current_status = Column(String, default="BOOKED")
+    transport_mode = Column(String, default="SEA") # SEA, AIR, RAIL, TRUCK
+    weight_kg = Column(Numeric(10, 2), default=0.0)
     eta = Column(DateTime(timezone=True))
     ata = Column(DateTime(timezone=True))
     # Fallback to simple float coordinates since PostGIS is not available in environment
     latitude = Column(Numeric(10, 6))
     longitude = Column(Numeric(10, 6))
+    
+    # e-POD Fields
+    pod_signature = Column(Text) # Base64 Data URL
+    pod_photos = Column(JSONB)   # List of strings (URLs or Base64)
+    pod_location = Column(JSONB) # {"lat": ..., "lng": ...}
+    pod_timestamp = Column(DateTime(timezone=True))
+    
+    # Green Supply Chain
+    carbon_emission = Column(Float, default=0.0) # kg CO2
+    is_green_certified = Column(Boolean, default=False)
+
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
 class PaymentEscrow(Base):
@@ -49,6 +62,7 @@ class PaymentEscrow(Base):
     tx_hash_release = Column(String)
     tx_hash_dispute = Column(String)
     tx_hash_refund = Column(String)
+    delivery_deadline = Column(DateTime(timezone=True))
     funded_at = Column(DateTime(timezone=True))
     resolved_at = Column(DateTime(timezone=True))
     created_at = Column(DateTime(timezone=True), server_default=func.now())

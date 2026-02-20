@@ -2,8 +2,7 @@
 
 import React, { useState } from 'react';
 import {
-  Video, Calendar, Clock, Users, Play, ExternalLink,
-  Globe, Ship, BarChart3, Shield, Cpu,
+  Video, Calendar, Clock, Users, Play,
 } from 'lucide-react';
 
 /* ───── data ───── */

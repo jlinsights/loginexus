@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import {
   Eye, Activity, AlertCircle, Clock, CheckCircle2,
-  Ship, Plane, Truck, MapPin, Filter, Bell, TrendingUp,
+  Ship, Plane, Truck, MapPin, Bell,
   ArrowUpRight, ArrowDownRight, Package,
 } from 'lucide-react';
 

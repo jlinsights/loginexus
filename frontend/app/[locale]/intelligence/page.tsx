@@ -3,8 +3,8 @@
 import React, { useState } from 'react';
 import {
   Brain, TrendingUp, AlertTriangle, Route, Activity,
-  ArrowUpRight, ArrowDownRight, Sparkles, CircleDot,
-  Ship, Plane, Truck, RefreshCcw,
+  ArrowUpRight, Sparkles,
+  Ship, Plane, RefreshCcw,
 } from 'lucide-react';
 
 /* ───── mock data ───── */

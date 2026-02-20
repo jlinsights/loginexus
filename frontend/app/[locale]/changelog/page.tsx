@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import {
   Megaphone, Sparkles, Wrench, Bug, Tag,
-  ChevronRight, Filter, Star,
+  Star,
 } from 'lucide-react';
 
 /* ───── types & data ───── */

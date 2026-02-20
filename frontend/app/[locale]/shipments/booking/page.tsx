@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import {
-  Ship, Calendar, Clock, Anchor, ArrowRight, CheckCircle2,
+  Ship, Clock, Anchor, CheckCircle2,
   ChevronRight, MapPin, Filter,
 } from 'lucide-react';
 

@@ -2,9 +2,9 @@
 
 import React, { useState } from 'react';
 import {
-  FileText, Download, Eye, Clock, Tag,
+  Download,
   Ship, Plane, Shield, BarChart3, Globe, Leaf,
-  ArrowRight, BookOpen, CheckCircle2,
+  BookOpen, CheckCircle2,
 } from 'lucide-react';
 
 /* ───── data ───── */

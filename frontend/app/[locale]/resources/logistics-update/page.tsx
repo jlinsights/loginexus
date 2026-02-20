@@ -3,8 +3,8 @@
 import React, { useState } from 'react';
 import {
   Globe, TrendingUp, TrendingDown, Ship, Plane, Truck,
-  AlertTriangle, Clock, ArrowRight, Calendar, MapPin,
-  Anchor, BarChart3, ChevronRight,
+  AlertTriangle, Clock,
+  BarChart3,
 } from 'lucide-react';
 
 /* ───── data ───── */

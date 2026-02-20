@@ -5,24 +5,24 @@ import { Link } from '@/i18n/routing'
 import LanguageToggle from '@/app/components/LanguageToggle'
 import { ThemeToggle } from '@/app/components/ThemeToggle'
 import {
-  Ship, Plane, Truck, Package, Search,
+  Ship, Plane, Search,
   ArrowRight, ChevronDown, ChevronLeft, ChevronRight, Globe, Shield, BarChart3,
   Users, Zap, CheckCircle2, ExternalLink,
-  MapPin, Phone, Mail, FileText, Headphones,
+  MapPin, Mail, FileText,
   X, Star, Quote, BookOpen, Compass, Leaf,
-  Banknote, ClipboardList, Layers,
-  Brain, Warehouse, Eye, Megaphone,
-  Newspaper, Video,
   Calculator, Receipt, Building2,
 } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import {useTranslations} from 'next-intl';
 import Newsletter from '@/app/components/Newsletter'
+import QuickQuoteWidget from '@/app/components/QuickQuoteWidget'
+import MarketIntelligence from '@/app/components/MarketIntelligence'
+import LiveActivityFeed from '@/app/components/LiveActivityFeed'
 
 const LandingHeroMap = dynamic(() => import('@/app/components/LandingHeroMap').then(mod => mod.LandingHeroMap), {
   ssr: false,
-  loading: () => <div className="absolute inset-0 bg-slate-900" />
+  loading: () => <div className="absolute inset-0 bg-slate-100 dark:bg-slate-900" />
 })
 
 /* ───────── hooks ───────── */
@@ -107,7 +107,7 @@ export default function LandingPage() {
   const t = useTranslations();
   const [solutionTab, setSolutionTab] = useState('transport')
   const [segment, setSegment] = useState<'shipper' | 'forwarder'>('shipper')
-  const [trackingQuery, setTrackingQuery] = useState('')
+
   const [showBanner, setShowBanner] = useState(true)
   const [testimonialIdx, setTestimonialIdx] = useState(0)
 
@@ -401,57 +401,50 @@ export default function LandingPage() {
         <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32 w-full">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Left: Copy */}
-            <Reveal>
-              <div className="space-y-8">
-                <div className="inline-flex items-center gap-2 text-sm font-medium text-blue-300 bg-blue-900/30 px-4 py-1.5 rounded-full border border-blue-500/30 backdrop-blur-md">
-                  <Zap size={14} /> {t('HomePage.blockchainBadge')}
+            <div className="space-y-8 max-w-2xl">
+              <Reveal>
+                <div className="inline-flex items-center gap-2 text-sm font-medium text-blue-600 dark:text-blue-300 bg-blue-100 dark:bg-blue-900/30 px-4 py-1.5 rounded-full border border-blue-200 dark:border-blue-500/30 backdrop-blur-md mb-6">
+                  <Zap size={14} className="fill-blue-600 dark:fill-blue-300" /> {t('HomePage.blockchainBadge')}
                 </div>
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight tracking-tight" dangerouslySetInnerHTML={{ __html: t.raw('HomePage.title') }} />
-                <p className="text-lg text-slate-400 max-w-lg leading-relaxed" dangerouslySetInnerHTML={{ __html: t.raw('HomePage.subtitle') }} />
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <Link href="/register" className="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3.5 rounded-full transition-all shadow-lg shadow-blue-600/25 hover:shadow-blue-600/40 hover:-translate-y-0.5">
+                <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-slate-900 dark:text-white leading-tight tracking-tight mb-6">
+                  The Future of <br/>
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500">Trustless Logistics</span>
+                </h1>
+                <p className="text-lg sm:text-xl text-slate-600 dark:text-slate-300 leading-relaxed mb-8 max-w-lg">
+                  Experience true transparency with Blockchain Verification. No hidden fees, no data manipulation—just pure, verified logistics.
+                </p>
+                
+                {/* Social Proof / Network Reach */}
+                <div className="flex items-center gap-6 pt-4 border-t border-slate-200 dark:border-slate-800/50">
+                    <div>
+                        <div className="text-2xl font-bold text-slate-900 dark:text-white">120+</div>
+                        <div className="text-xs text-slate-500 uppercase font-semibold">Global Partners</div>
+                    </div>
+                    <div>
+                        <div className="text-2xl font-bold text-slate-900 dark:text-white">15k+</div>
+                        <div className="text-xs text-slate-500 uppercase font-semibold">Verified Shipments</div>
+                    </div>
+                    <div>
+                        <div className="text-2xl font-bold text-slate-900 dark:text-white">$45M</div>
+                        <div className="text-xs text-slate-500 uppercase font-semibold">Value Secured</div>
+                    </div>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-4 mt-8">
+                  <Link href="/register" className="inline-flex items-center justify-center gap-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold px-8 py-3.5 rounded-full transition-all hover:scale-105 shadow-xl hover:shadow-2xl">
                     {t('HomePage.startForFree')} <ArrowRight size={18} />
                   </Link>
-                  <button className="inline-flex items-center justify-center gap-2 border border-white/30 text-white hover:bg-white/10 hover:border-white/60 font-medium px-8 py-3.5 rounded-full transition-all backdrop-blur-sm">
+                  <button className="inline-flex items-center justify-center gap-2 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium px-8 py-3.5 rounded-full transition-all">
                     {t('HomePage.contactSales')} <ExternalLink size={16} />
                   </button>
                 </div>
-                {/* Mini tracking search */}
-                <div className="relative max-w-md">
-                  <form onSubmit={(e) => { 
-                      e.preventDefault(); 
-                      if(trackingQuery.trim()) {
-                          window.location.href = `/tracking?number=${trackingQuery.trim()}`;
-                      }
-                  }}>
-                    <div className="flex items-center bg-white/10 backdrop-blur-sm border border-white/20 rounded-full overflow-hidden focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent transition-all">
-                      <Search size={16} className="ml-4 text-slate-400 flex-shrink-0" />
-                      <input
-                        type="text"
-                        placeholder={t('HomePage.trackPlaceholder')}
-                        value={trackingQuery}
-                        onChange={(e) => setTrackingQuery(e.target.value)}
-                        className="w-full bg-transparent border-none text-white placeholder-slate-400 text-sm px-3 py-3 focus:ring-0 outline-none"
-                      />
-                      <button type="submit" className="bg-white/10 hover:bg-white/20 text-white p-2 mr-1 rounded-full transition-colors">
-                        <ArrowRight size={16} />
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </Reveal>
+              </Reveal>
+            </div>
 
-            {/* Right: Visual/Map */}
-            <div className="relative hidden lg:block h-[500px]">
-              <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 to-cyan-500/10 backdrop-blur-sm rounded-3xl border border-white/10 p-6 flex items-center justify-center">
-                 <div className="text-center">
-                    <div className="w-20 h-20 bg-blue-500/20 rounded-2xl flex items-center justify-center mx-auto mb-4 backdrop-blur-md border border-blue-400/30">
-                      <Globe size={40} className="text-blue-200" />
-                    </div>
-                    <p className="text-blue-100 font-medium">{t('HomePage.visualPlaceholder')}</p>
-                 </div>
-              </div>
+            {/* Right: Quick Quote Widget (Cello Style) */}
+            <div className="relative flex justify-center lg:justify-end">
+               <div className="absolute inset-0 bg-blue-500/20 blur-3xl rounded-full -z-10 transform translate-y-10 scale-90" />
+               <QuickQuoteWidget />
             </div>
           </div>
         </div>
@@ -460,6 +453,15 @@ export default function LandingPage() {
           <div className="w-6 h-10 rounded-full border-2 border-white/30 flex justify-center pt-2">
             <div className="w-1 h-2 bg-white/60 rounded-full animate-bounce" />
           </div>
+        </div>
+      </section>
+
+      {/* ═══ MARKET INTELLIGENCE ═══ (SURFF Inspired) */}
+      <section className="py-12 bg-white dark:bg-slate-950 border-b border-slate-100 dark:border-slate-800/50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Reveal>
+            <MarketIntelligence />
+          </Reveal>
         </div>
       </section>
 
@@ -890,6 +892,9 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
+
+      {/* ═══ LIVE ACTIVITY FEED ═══ (SURFF Inspired) */}
+      <LiveActivityFeed />
     </div>
   )
 }

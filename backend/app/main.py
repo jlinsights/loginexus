@@ -8,6 +8,7 @@ from app.core.middleware import TenantMiddleware
 from app.api.api import api_router
 from app.database import engine, Base
 from app.services.escrow_sync import EscrowEventSync
+from app.services.oracle_service import OracleService
 from app import models  # Ensure models are imported so metadata is registered
 
 logger = logging.getLogger(__name__)
@@ -18,15 +19,21 @@ logger = logging.getLogger(__name__)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup: launch escrow event sync background task
+    # Startup: launch background tasks
     sync = EscrowEventSync()
-    task = asyncio.create_task(sync.start())
-    logger.info("Escrow event sync background task scheduled")
+    oracle = OracleService()
+    
+    sync_task = asyncio.create_task(sync.start())
+    oracle_task = asyncio.create_task(oracle.start())
+    
+    logger.info("Background tasks (Sync, Oracle) scheduled")
     yield
-    # Shutdown: cancel background task
-    task.cancel()
+    # Shutdown: cancel background tasks
+    sync_task.cancel()
+    oracle_task.cancel()
     try:
-        await task
+        await sync_task
+        await oracle_task
     except asyncio.CancelledError:
         pass
 

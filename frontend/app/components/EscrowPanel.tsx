@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Shield, AlertTriangle, Loader2 } from 'lucide-react';
 import { useAccount } from 'wagmi';
-import { encodeAbiParameters, keccak256, toHex } from 'viem';
+import { toHex } from 'viem';
 import { useEscrowAddress, useEscrowState, useDisputeEscrow } from '../../lib/contracts/hooks';
 import { EscrowStatusBadge } from './EscrowStatusBadge';
 import { FundEscrowModal } from './FundEscrowModal';
@@ -30,7 +30,7 @@ export function EscrowPanel({ shipmentId, escrowContractAddress }: EscrowPanelPr
   // Use direct address if provided, otherwise look up from factory
   const escrowAddr = (escrowContractAddress as `0x${string}`) || factoryAddr;
 
-  const { status, amount, buyer, seller, isLoading: stateLoading, refetch } = useEscrowState(escrowAddr);
+  const { status, amount, buyer, isLoading: stateLoading, refetch } = useEscrowState(escrowAddr);
   const disputeHook = useDisputeEscrow();
 
   const isLoading = addrLoading || stateLoading;

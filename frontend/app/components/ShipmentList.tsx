@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { fetchShipments, Shipment } from '../../lib/api';
+import { fetchShipments } from '../../lib/api';
 import Link from 'next/link';
 
 export function ShipmentList() {

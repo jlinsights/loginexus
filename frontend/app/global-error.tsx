@@ -1,5 +1,6 @@
 'use client'
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
 export default function GlobalError({
   error,
   reset,
@@ -7,6 +8,7 @@ export default function GlobalError({
   error: Error & { digest?: string }
   reset: () => void
 }) {
+/* eslint-enable @typescript-eslint/no-unused-vars */
   return (
     <html lang="en">
       <body>

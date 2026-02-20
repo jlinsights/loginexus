@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+from sqlalchemy.sql import func
 from typing import List
 from ...database import get_db
 from ... import schemas, models
@@ -72,4 +73,25 @@ def sync_escrow(escrow_id: str, db: Session = Depends(get_db)):
     # Sync is handled by the background service; this endpoint
     # returns current DB state. A full implementation would call
     # escrow_sync.sync_single() here.
+    return escrow
+
+
+@router.post("/{escrow_id}/simulate_payment", response_model=schemas.EscrowResponse)
+def simulate_payment(escrow_id: str, db: Session = Depends(get_db)):
+    """
+    BENCHMARK/DEMO ONLY: Simulate funding an escrow.
+    """
+    escrow = db.query(models.PaymentEscrow).filter(
+        models.PaymentEscrow.id == escrow_id
+    ).first()
+    if not escrow:
+        raise HTTPException(status_code=404, detail="Escrow not found")
+    
+    escrow.status = "funded"
+    escrow.is_locked = True
+    escrow.funded_at = func.now()
+    
+    db.commit()
+    db.refresh(escrow)
+    
     return escrow

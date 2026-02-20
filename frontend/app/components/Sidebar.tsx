@@ -8,7 +8,6 @@ import {
   ChevronDown, Package, ClipboardList, Ship,
   Shield, Banknote, FileCheck, Layers,
   Brain, Eye, Leaf, Warehouse, Code2, Megaphone, LifeBuoy,
-  BookOpen, Video, FileText, Newspaper,
   DollarSign, Users2, Target, BarChart3,
 } from 'lucide-react';
 import { useWhitelabel } from './WhitelabelProvider';

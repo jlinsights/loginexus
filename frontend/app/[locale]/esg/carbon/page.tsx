@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Leaf, TrendingDown, Ship, Plane, Truck, Target,
   Download, ArrowDownRight, ArrowUpRight, BarChart3,

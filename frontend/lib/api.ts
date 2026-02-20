@@ -33,6 +33,11 @@ export interface Shipment {
     longitude: number | null;
     eta: string | null;
     tenant_id: string;
+    // Green Supply Chain
+    carbon_emission?: number;
+    is_green_certified?: boolean;
+    transport_mode?: string;
+    escrow_id?: string;
 }
 
 // --- Tenant API ---
@@ -118,6 +123,11 @@ export const fetchEscrowByShipment = async (shipmentId: string): Promise<EscrowR
 
 export const syncEscrow = async (id: string): Promise<EscrowResponse> => {
     const response = await api.post<EscrowResponse>(`/escrows/${id}/sync`);
+    return response.data;
+};
+
+export const simulatePayment = async (id: string): Promise<EscrowResponse> => {
+    const response = await api.post<EscrowResponse>(`/escrows/${id}/simulate_payment`);
     return response.data;
 };
 

@@ -21,6 +21,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-leaflet": "^4.2.1",
+    "react-signature-canvas": "^1.1.0-alpha.2",
     "recharts": "^3.7.0",
     "viem": "^2.7.1",
     "wagmi": "^2.5.7"
@@ -29,6 +30,7 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/react-signature-canvas": "^1.0.7",
     "autoprefixer": "^10.4.20",
     "eslint": "^8",
     "eslint-config-next": "14.2.14",

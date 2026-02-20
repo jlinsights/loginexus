@@ -2,8 +2,8 @@
 
 import React, { useState, useMemo } from 'react';
 import {
-  Shield, Calculator, CheckCircle2, AlertTriangle,
-  Package, DollarSign, FileText, Plus,
+  Shield, Calculator,
+  Package, DollarSign, Plus,
 } from 'lucide-react';
 
 /* ───── Types & Data ───── */

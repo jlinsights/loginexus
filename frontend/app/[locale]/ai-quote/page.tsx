@@ -2,9 +2,9 @@
 
 import React, { useState } from 'react';
 import {
-  Brain, Ship, Plane, Truck, ArrowRight, Loader2,
+  Brain, Ship, Plane, ArrowRight, Loader2,
   TrendingDown, Star, Clock, MapPin, Shield, Zap,
-  ChevronDown, Package, DollarSign, BarChart3,
+  ChevronDown, Package, DollarSign,
 } from 'lucide-react';
 
 /* ───── data ───── */

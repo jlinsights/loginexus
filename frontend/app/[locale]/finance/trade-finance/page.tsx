@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import {
   Banknote, Clock, CheckCircle2, AlertCircle,
-  ArrowRight, FileText, TrendingUp, DollarSign,
+  FileText, TrendingUp,
   Filter,
 } from 'lucide-react';
 

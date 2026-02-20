@@ -1,54 +1,25 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import ToolLayout from '../ToolLayout'
-import { Ship, Plane, Truck, Search, ArrowRight, TrendingDown, Clock, MapPin, Bell, X, Loader2, CheckCircle2 } from 'lucide-react'
+import { Search, ArrowRight, TrendingDown, Clock, MapPin, Bell, X, Loader2, CheckCircle2 } from 'lucide-react'
 import { createRateSubscription, RateSubscriptionCreate } from '@/lib/api'
-
-/* ───── data ───── */
-
-const PORTS = [
-  { code: 'KRPUS', name: '부산', country: '🇰🇷' },
-  { code: 'KRINC', name: '인천', country: '🇰🇷' },
-  { code: 'CNSHA', name: '상하이', country: '🇨🇳' },
-  { code: 'CNNGB', name: '닝보', country: '🇨🇳' },
-  { code: 'CNSHE', name: '선전', country: '🇨🇳' },
-  { code: 'JPTYO', name: '도쿄', country: '🇯🇵' },
-  { code: 'JPOSA', name: '오사카', country: '🇯🇵' },
-  { code: 'SGSIN', name: '싱가포르', country: '🇸🇬' },
-  { code: 'HKHKG', name: '홍콩', country: '🇭🇰' },
-  { code: 'THBKK', name: '방콕', country: '🇹🇭' },
-  { code: 'VNSGN', name: '호치민', country: '🇻🇳' },
-  { code: 'VNHPH', name: '하이퐁', country: '🇻🇳' },
-  { code: 'USNYC', name: '뉴욕', country: '🇺🇸' },
-  { code: 'USLAX', name: 'LA/롱비치', country: '🇺🇸' },
-  { code: 'USSEA', name: '시애틀', country: '🇺🇸' },
-  { code: 'DEHAM', name: '함부르크', country: '🇩🇪' },
-  { code: 'NLRTM', name: '로테르담', country: '🇳🇱' },
-  { code: 'GBFXT', name: '펠릭스토', country: '🇬🇧' },
-  { code: 'AEJEA', name: '제벨알리', country: '🇦🇪' },
-  { code: 'INMUN', name: '뭄바이', country: '🇮🇳' },
-]
-
-type Mode = 'ocean_fcl' | 'ocean_lcl' | 'air' | 'trucking'
-
-const MODES: { id: Mode; label: string; icon: React.ElementType; unit: string }[] = [
-  { id: 'ocean_fcl', label: '해상 FCL', icon: Ship, unit: '/20ft' },
-  { id: 'ocean_lcl', label: '해상 LCL', icon: Ship, unit: '/CBM' },
-  { id: 'air', label: '항공', icon: Plane, unit: '/kg' },
-  { id: 'trucking', label: '내륙 트럭', icon: Truck, unit: '/대' },
-]
+import { useSearchParams } from 'next/navigation'
+import { PORTS, MODES, Mode } from '@/lib/constants'
 
 // Simulated rate ranges (base + variance by origin-destination hash)
-function simulateRate(origin: string, dest: string, mode: Mode) {
+function simulateRate(origin: string, dest: string, mode: string) {
   const hash = (origin + dest).split('').reduce((a, c) => a + c.charCodeAt(0), 0)
+  // Fallback for mode parsing
+  const validMode = (MODES.find(m => m.id === mode) ? mode : 'ocean_fcl') as Mode
+  
   const bases: Record<Mode, { min: number; max: number; days: [number, number] }> = {
     ocean_fcl: { min: 1200, max: 3800, days: [18, 35] },
     ocean_lcl: { min: 45, max: 120, days: [22, 40] },
     air: { min: 3, max: 12, days: [2, 5] },
     trucking: { min: 800000, max: 2500000, days: [1, 3] },
   }
-  const b = bases[mode]
+  const b = bases[validMode]
   const factor = ((hash % 100) / 100)
   const low = Math.round(b.min + (b.max - b.min) * factor * 0.6)
   const high = Math.round(low + (b.max - b.min) * 0.25)
@@ -65,10 +36,27 @@ function formatCurrency(v: number) {
 /* ───── component ───── */
 
 export default function RateExplorerPage() {
+  const searchParams = useSearchParams()
   const [origin, setOrigin] = useState('')
   const [dest, setDest] = useState('')
-  const [mode, setMode] = useState<Mode>('ocean_fcl')
+  const [mode, setMode] = useState<string>('ocean_fcl')
   const [results, setResults] = useState<ReturnType<typeof simulateRate> | null>(null)
+
+  // Initialize from URL params
+  useEffect(() => {
+    const pOrigin = searchParams.get('origin')
+    const pDest = searchParams.get('dest')
+    const pMode = searchParams.get('mode')
+
+    if (pOrigin) setOrigin(pOrigin)
+    if (pDest) setDest(pDest)
+    if (pMode && MODES.some(m => m.id === pMode)) setMode(pMode)
+
+    // Auto-search if all params are present
+    if (pOrigin && pDest && pOrigin !== pDest) {
+        setResults(simulateRate(pOrigin, pDest, pMode || 'ocean_fcl'))
+    }
+  }, [searchParams])
 
   // Subscription State
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -80,7 +68,7 @@ export default function RateExplorerPage() {
 
   const handleSearch = () => {
     if (!origin || !dest || origin === dest) return
-    setResults(simulateRate(origin, dest, mode))
+    setResults(simulateRate(origin, dest, mode as Mode))
   }
 
   const openSubscribeModal = () => {

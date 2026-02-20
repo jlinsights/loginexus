@@ -9,7 +9,10 @@ import { ShipmentWorkflow } from '@/app/components/ShipmentWorkflow';
 import { SegmentToggle } from '@/app/components/SegmentToggle';
 import { RoleToggle, UserRole } from '@/app/components/RoleToggle';
 import { ForwarderView } from '@/app/components/ForwarderView';
-import { Map, List, AlertTriangle, Clock, MapPinOff, CloudRain, FileWarning } from 'lucide-react';
+import { Map, List, AlertTriangle, Clock, MapPinOff, CloudRain, FileWarning, CheckCircle2 } from 'lucide-react';
+import { UploadDocsModal } from '@/app/components/UploadDocsModal';
+import { FundEscrowModal } from '@/app/components/FundEscrowModal';
+import { fetchEscrowByShipment, createEscrow, EscrowResponse } from '@/lib/api';
 
 // Dynamically import DashboardMap to avoid SSR issues with Leaflet
 const DashboardMap = dynamic(
@@ -28,6 +31,13 @@ export default function ShipmentDashboard() {
   const [viewMode, setViewMode] = useState<ViewMode>('map');
   const [userRole, setUserRole] = useState<UserRole>('shipper');
 
+  // Action Handling State
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+  const [uploadShipment, setUploadShipment] = useState<Shipment | null>(null);
+  const [isFundModalOpen, setIsFundModalOpen] = useState(false);
+  const [fundEscrowData, setFundEscrowData] = useState<{address: `0x${string}`, amount: bigint, escrowId?: string} | null>(null);
+  const [isProcessingAction, setIsProcessingAction] = useState(false);
+
   const { data: shipments = [], isLoading, isError } = useQuery({
     queryKey: ['shipments'],
     queryFn: fetchShipments,
@@ -40,6 +50,55 @@ export default function ShipmentDashboard() {
       queryClient.invalidateQueries({ queryKey: ['shipments'] });
     },
   });
+
+  const handleActionTrigger = async (type: string, shipment: Shipment | null) => {
+      if (!shipment) {
+          // Handle empty state action (e.g. view history)
+          setViewMode('table');
+          return;
+      }
+
+      if (type === 'UPLOAD_DOCS') {
+          setUploadShipment(shipment);
+          setIsUploadModalOpen(true);
+      } else if (type === 'PAYMENT') {
+          setIsProcessingAction(true);
+          try {
+              let escrow: EscrowResponse | null = null;
+              try {
+                  escrow = await fetchEscrowByShipment(shipment.id);
+              } catch {
+                  // Not found, create one if appropriate
+                  if (shipment.blockchain_status === 'NONE') {
+                      // Auto-create for simulation
+                      escrow = await createEscrow({
+                          shipment_id: shipment.id,
+                          buyer_wallet_address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266", // Mock
+                          seller_wallet_address: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8", // Mock
+                          amount_usdc: 2450.00,
+                          escrow_contract_address: "0xMockAddressForSimulation" // Mock
+                      });
+                  }
+              }
+
+              if (escrow) {
+                  setFundEscrowData({
+                      address: (escrow.escrow_contract_address || "0xMockAddressForSimulation") as `0x${string}`,
+                      amount: BigInt(Math.floor(escrow.amount_usdc * 1000000)),
+                      escrowId: escrow.id
+                  });
+                  setIsFundModalOpen(true);
+              } else {
+                  alert("Could not initialize payment. Please try again.");
+              }
+          } catch (err) {
+              console.error(err);
+              alert("An error occurred while preparing payment actions.");
+          } finally {
+              setIsProcessingAction(false);
+          }
+      }
+  };
 
   const handleSimulateArrival = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -54,7 +113,8 @@ export default function ShipmentDashboard() {
   // Derive exception data
   const now = new Date();
   const delayedShipments = shipments.filter(s => {
-    if (s.current_status?.toUpperCase() === 'DELIVERED') return false;
+    const status = s.current_status?.toUpperCase();
+    if (status === 'DELIVERED') return false;
     if (!s.eta) return false;
     return new Date(s.eta) < now;
   });
@@ -62,7 +122,7 @@ export default function ShipmentDashboard() {
   // Simulated Data for Benchmarking
   const weatherDisruptedShipments = shipments.filter(s => 
       ['USLAX', 'CNSHA', 'KRPUS'].some(code => s.destination.includes(code) || s.origin.includes(code)) && 
-      s.current_status === 'IN_TRANSIT'
+      s.current_status?.toUpperCase() === 'IN_TRANSIT'
   );
   
   const portCongestionShipments = shipments.filter(s => 
@@ -103,8 +163,8 @@ export default function ShipmentDashboard() {
     );
   }
 
-  const inTransitCount = shipments.filter(s => s.current_status === 'IN_TRANSIT' || s.current_status === 'In Transit').length;
-  const arrivedCount = shipments.filter(s => s.current_status === 'DELIVERED' || s.current_status === 'Delivered').length;
+  const inTransitCount = shipments.filter(s => s.current_status?.toUpperCase() === 'IN_TRANSIT').length;
+  const arrivedCount = shipments.filter(s => s.current_status?.toUpperCase() === 'DELIVERED').length;
   const pendingPaymentCount = shipments.filter(s => s.blockchain_status === 'LOCKED').length;
 
   return (
@@ -142,6 +202,100 @@ export default function ShipmentDashboard() {
 
       {userRole === 'shipper' ? (
         <>
+        {/* Action Required Section */}
+        {(() => {
+           interface ActionItem {
+               id: string;
+               type: string;
+               title: string;
+               subtitle: string;
+               btn: string;
+               color: string;
+               icon: React.ElementType;
+               data: Shipment | null;
+           }
+
+           const actions: ActionItem[] = [];
+           
+           // 1. Upload Docs
+           const booked = shipments.filter(s => s.current_status?.toUpperCase() === 'BOOKED');
+           booked.forEach(s => {
+               actions.push({
+                   id: 'act_docs_' + s.id,
+                   type: 'UPLOAD_DOCS',
+                   title: 'Upload C/I & P/L',
+                   subtitle: `Shipment #${s.tracking_number} (${s.origin})`, 
+                   btn: 'Upload Now',
+                   color: 'blue',
+                   icon: FileWarning,
+                   data: s
+               });
+           });
+
+           // 2. Payment
+           const paymentPending = shipments.filter(s => {
+               const status = s.current_status?.toUpperCase();
+               return (status === 'IN_TRANSIT' || status === 'BOOKED') && s.blockchain_status !== 'LOCKED';
+           });
+           paymentPending.forEach(s => {
+               const isNone = s.blockchain_status === 'NONE';
+               actions.push({
+                   id: 'act_pay_' + s.id,
+                   type: 'PAYMENT',
+                   title: isNone ? 'Secure & Pay' : 'Approve Freight Invoice',
+                   subtitle: `$2,450.00 (Pending) - #${s.tracking_number}`,
+                   btn: isNone ? 'Setup Escrow' : 'Make Payment',
+                   color: isNone ? 'amber' : 'purple',
+                   icon: Clock,
+                   data: s
+               });
+           });
+
+           // Empty State (only if no actions)
+           if (actions.length === 0 && shipments.length === 0 && !isLoading) {
+                actions.push({
+                   id: 'act_demo_empty',
+                   type: 'INFO',
+                   title: 'No Actions Pending',
+                   subtitle: 'All shipments are up to date.',
+                   btn: 'View History',
+                   color: 'slate',
+                   icon: CheckCircle2,
+                   data: null
+               });
+           }
+           
+           if (actions.length === 0) return null;
+
+           return (
+              <div className="mb-8">
+                  <h3 className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+                      Action Required ({actions.length})
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      {actions.map((item) => (
+                          <div key={item.id} className={`bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 rounded-xl shadow-sm hover:shadow-md transition-shadow flex items-start gap-4 border-l-4 border-l-${item.color}-500`}>
+                              <div className={`p-2 bg-${item.color}-50 dark:bg-${item.color}-900/30 rounded-lg text-${item.color}-600 dark:text-${item.color}-400`}>
+                                  <item.icon size={20} />
+                              </div>
+                              <div className="flex-1">
+                                  <h4 className="font-bold text-slate-900 dark:text-white text-sm">{item.title}</h4>
+                                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 mb-3 text-ellipsis overflow-hidden whitespace-nowrap">{item.subtitle}</p>
+                                  <button 
+                                      onClick={() => handleActionTrigger(item.type, item.data)}
+                                      disabled={isProcessingAction}
+                                      className={`text-xs font-bold bg-${item.color}-600 text-white py-1.5 px-3 rounded-lg hover:bg-${item.color}-700 transition-colors w-full disabled:opacity-50`}
+                                  >
+                                      {isProcessingAction && item.type === 'PAYMENT' ? 'Processing...' : item.btn}
+                                  </button>
+                              </div>
+                          </div>
+                      ))}
+                  </div>
+              </div>
+           );
+        })()}
             {/* Stats Cards */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 lg:gap-4 mb-6">
                 <StatusCard label="Total" count={shipments.length} color="bg-blue-600 dark:bg-blue-700" />
@@ -297,6 +451,29 @@ export default function ShipmentDashboard() {
         </>
       ) : (
         <ForwarderView />
+      )}
+
+      {/* Modals */}
+      {uploadShipment && (
+        <UploadDocsModal
+            isOpen={isUploadModalOpen}
+            onClose={() => setIsUploadModalOpen(false)}
+            shipmentId={uploadShipment.id}
+            trackingNumber={uploadShipment.tracking_number}
+        />
+      )}
+
+      {fundEscrowData && (
+        <FundEscrowModal
+            isOpen={isFundModalOpen}
+            onClose={() => setIsFundModalOpen(false)}
+            escrowAddress={fundEscrowData.address}
+            amount={fundEscrowData.amount}
+            escrowId={fundEscrowData.escrowId}
+            onSuccess={() => {
+                queryClient.invalidateQueries({ queryKey: ['shipments'] });
+            }}
+        />
       )}
 
       {/* Single Shipment Map Modal */}
