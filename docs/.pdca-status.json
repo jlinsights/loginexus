@@ -5,7 +5,7 @@
   "primaryFeature": "e-POD",
   "features": {
     "e-POD": {
-      "phase": "design",
+      "phase": "do",
       "startedAt": "2026-02-21T00:00:00.000Z",
       "planDoc": "docs/01-plan/features/e-POD.plan.md",
       "designDoc": "docs/02-design/features/e-POD.design.md"

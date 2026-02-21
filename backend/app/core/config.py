@@ -48,6 +48,12 @@ class Settings(BaseSettings):
     STRIPE_PRICE_ENTERPRISE: str = ""
     BILLING_ENABLED: bool = True
 
+    # --- POD Storage ---
+    POD_STORAGE_PATH: str = "./uploads/pod"
+    POD_STORAGE_BACKEND: str = "local"  # local | s3
+    POD_MAX_PHOTOS: int = 5
+    POD_MAX_FILE_SIZE_MB: int = 5
+
     # --- Logging ---
     LOG_LEVEL: str = "INFO"
     LOG_FORMAT: str = "json"  # json | console

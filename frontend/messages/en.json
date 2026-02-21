@@ -112,7 +112,8 @@
     "changelog": "Changelog",
     "support": "Support",
     "settings": "Settings",
-    "menu": "Menu"
+    "menu": "Menu",
+    "pod": "POD"
   },
   "Shipment": {
     "id": "Shipment ID",
@@ -127,5 +128,49 @@
     "close": "Close",
     "searchPlaceholder": "Search by B/L or Tracking No.",
     "search": "Search"
+  },
+  "pod": {
+    "title": "e-POD Entry",
+    "receiverName": "Receiver Name",
+    "receiverContact": "Receiver Contact (optional)",
+    "photos": "Cargo Photos",
+    "signature": "Receiver Signature",
+    "signHint": "Sign above using your finger",
+    "clear": "Clear",
+    "submit": "Confirm Delivery",
+    "submitting": "Uploading Proof...",
+    "success": "Delivery Confirmed!",
+    "successMessage": "Proof of Delivery has been successfully uploaded.",
+    "tracking": "Tracking",
+    "location": "Location",
+    "accuracy": "{meters}m accuracy",
+    "retry": "Retry",
+    "manualEntry": "Enter Manually",
+    "podManagement": "POD Management",
+    "filterAll": "All",
+    "filterSubmitted": "Submitted",
+    "filterVerified": "Verified",
+    "filterDisputed": "Disputed",
+    "podDetails": "POD Details",
+    "route": "Route",
+    "receiver": "Receiver",
+    "photoEvidence": "Photos",
+    "gpsLocation": "GPS Location",
+    "adminNotes": "Admin Notes",
+    "verify": "Verify",
+    "dispute": "Dispute",
+    "verifiedAt": "Verified at",
+    "verifiedBy": "Verified by",
+    "noPhotos": "No photos uploaded",
+    "noPods": "No POD submissions found",
+    "errors": {
+      "signatureRequired": "Please sign the digital pad.",
+      "receiverNameRequired": "Please enter the receiver's name.",
+      "geoNotSupported": "Geolocation is not supported by your browser.",
+      "geoFailed": "Unable to retrieve location. Please enable location services.",
+      "uploadFailed": "Failed to submit Proof of Delivery. Please try again.",
+      "alreadySubmitted": "POD has already been submitted for this shipment.",
+      "fileTooLarge": "Photo is too large. Maximum size is 5MB."
+    }
   }
 }

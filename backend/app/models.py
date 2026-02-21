@@ -45,9 +45,15 @@ class Shipment(Base):
     
     # e-POD Fields
     pod_signature = Column(Text) # Base64 Data URL
-    pod_photos = Column(JSONB)   # List of strings (URLs or Base64)
-    pod_location = Column(JSONB) # {"lat": ..., "lng": ...}
+    pod_photos = Column(JSONB)   # List of strings (file URLs)
+    pod_location = Column(JSONB) # {"lat": ..., "lng": ..., "accuracy": ...}
     pod_timestamp = Column(DateTime(timezone=True))
+    pod_status = Column(String, nullable=True)           # submitted | verified | disputed
+    pod_receiver_name = Column(String, nullable=True)
+    pod_receiver_contact = Column(String, nullable=True)
+    pod_notes = Column(Text, nullable=True)
+    pod_verified_at = Column(DateTime(timezone=True), nullable=True)
+    pod_verified_by = Column(String, nullable=True)
     
     # Green Supply Chain
     carbon_emission = Column(Float, default=0.0) # kg CO2

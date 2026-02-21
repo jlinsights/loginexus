@@ -27,6 +27,12 @@ class ShipmentBase(BaseModel):
     pod_photos: Optional[List[str]] = None
     pod_location: Optional[dict] = None
     pod_timestamp: Optional[datetime] = None
+    pod_status: Optional[str] = None
+    pod_receiver_name: Optional[str] = None
+    pod_receiver_contact: Optional[str] = None
+    pod_notes: Optional[str] = None
+    pod_verified_at: Optional[datetime] = None
+    pod_verified_by: Optional[str] = None
 
     # Green Supply Chain
     carbon_emission: Optional[float] = 0.0
@@ -283,3 +289,77 @@ class RateSubscriptionResponse(RateSubscriptionBase):
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
+
+# --- POD Schemas ---
+
+class PODStatus(str, Enum):
+    SUBMITTED = "submitted"
+    VERIFIED = "verified"
+    DISPUTED = "disputed"
+
+class PODUploadResponse(BaseModel):
+    message: str
+    status: str
+    pod_status: str
+    tracking_number: str
+    pod_timestamp: datetime
+    photo_count: int
+
+class PODDetailResponse(BaseModel):
+    tracking_number: str
+    pod_status: Optional[str] = None
+    pod_signature: Optional[str] = None
+    pod_photos: Optional[List[str]] = None
+    pod_location: Optional[dict] = None
+    pod_timestamp: Optional[datetime] = None
+    pod_receiver_name: Optional[str] = None
+    pod_receiver_contact: Optional[str] = None
+    pod_notes: Optional[str] = None
+    pod_verified_at: Optional[datetime] = None
+    pod_verified_by: Optional[str] = None
+    shipment_origin: str
+    shipment_destination: str
+    current_status: str
+
+    model_config = ConfigDict(from_attributes=True)
+
+class PODVerifyRequest(BaseModel):
+    action: str
+    notes: Optional[str] = None
+
+class PODVerifyResponse(BaseModel):
+    tracking_number: str
+    pod_status: str
+    pod_verified_at: Optional[datetime] = None
+    pod_verified_by: Optional[str] = None
+    pod_notes: Optional[str] = None
+
+class PODListItem(BaseModel):
+    tracking_number: str
+    origin: str
+    destination: str
+    pod_status: Optional[str] = None
+    pod_timestamp: Optional[datetime] = None
+    pod_receiver_name: Optional[str] = None
+    photo_count: int = 0
+    current_status: str
+
+    model_config = ConfigDict(from_attributes=True)
+
+class PODListResponse(BaseModel):
+    items: List[PODListItem]
+    total: int
+    page: int
+    limit: int
+
+class PODReceiptResponse(BaseModel):
+    tracking_number: str
+    pod_status: Optional[str] = None
+    pod_timestamp: Optional[datetime] = None
+    pod_receiver_name: Optional[str] = None
+    pod_location: Optional[dict] = None
+    photo_count: int = 0
+    origin: str
+    destination: str
+    verified: bool = False
+    verified_at: Optional[datetime] = None

@@ -159,7 +159,7 @@ def create_shipment(request: Request, shipment: schemas.ShipmentCreate, db: Sess
 
     return new_shipment
 
-@router.post("/{tracking_number}/pod")
+@router.post("/{tracking_number}/pod", response_model=schemas.PODUploadResponse)
 @limiter.limit("100/minute")
 async def upload_pod(
     request: Request,
@@ -168,49 +168,73 @@ async def upload_pod(
     signature: str = Form(...),
     latitude: str = Form(...),
     longitude: str = Form(...),
+    accuracy: Optional[str] = Form(default=None),
+    receiver_name: str = Form(...),
+    receiver_contact: Optional[str] = Form(default=None),
     photos: List[UploadFile] = File(default=[]),
     db: Session = Depends(get_db),
 ):
-    # 1. Find Shipment
-    shipment = db.query(models.Shipment).filter(models.Shipment.tracking_number == tracking_number).first()
-    if not shipment:
-        raise HTTPException(status_code=404, detail="Shipment not found")
+    from ...services.pod_service import PODService
 
-    # 2. Process Photos (Convert to Base64 for MVP storage in JSONB)
-    # In production, upload to S3 and store URLs.
-    photo_data = []
+    # Read photo contents
+    photo_contents = []
     for photo in photos:
         content = await photo.read()
-        b64_string = base64.b64encode(content).decode('utf-8')
-        photo_data.append(f"data:{photo.content_type};base64,{b64_string}")
+        photo_contents.append((content, photo.content_type or "image/jpeg"))
 
-    # 3. Update Shipment
-    shipment.pod_signature = signature
-    shipment.pod_photos = photo_data
-    shipment.pod_location = {"lat": float(latitude), "lng": float(longitude)}
-    shipment.pod_timestamp = datetime.utcnow()
-    shipment.current_status = schemas.ShipmentStatus.DELIVERED.value
-    
-    db.commit()
-    db.refresh(shipment)
+    result = PODService.upload_pod(
+        db=db,
+        tracking_number=tracking_number,
+        signature=signature,
+        latitude=float(latitude),
+        longitude=float(longitude),
+        accuracy=float(accuracy) if accuracy else None,
+        receiver_name=receiver_name,
+        receiver_contact=receiver_contact,
+        photo_contents=photo_contents,
+    )
 
-    # 4. Audit Log
-    try:
-        log = models.AuditLog(
-            entity_type="SHIPMENT",
-            entity_id=shipment.id,
-            action="POD_UPLOAD",
-            new_value={"tracking": tracking_number, "status": "DELIVERED"},
-            performed_by="DRIVER_APP"
-        )
-        db.add(log)
-        db.commit()
-    except Exception as e:
-        print(f"Failed to audit POD: {e}")
-
-    # 5. Trigger Oracle for Automated Settlement
+    # Trigger Oracle for Automated Settlement
     oracle_service = OracleService()
     if oracle_service.w3:
         background_tasks.add_task(oracle_service.confirm_delivery, tracking_number)
 
-    return {"message": "POD uploaded successfully. Settlement logic triggered.", "status": "DELIVERED"}
+    return result
+
+
+@router.get("/{tracking_number}/pod", response_model=schemas.PODDetailResponse)
+def get_pod(tracking_number: str, db: Session = Depends(get_db)):
+    from ...services.pod_service import PODService
+    return PODService.get_pod(db, tracking_number)
+
+
+@router.post("/{tracking_number}/pod/verify", response_model=schemas.PODVerifyResponse)
+def verify_pod(
+    tracking_number: str,
+    body: schemas.PODVerifyRequest,
+    db: Session = Depends(get_db),
+):
+    from ...services.pod_service import PODService
+    return PODService.verify_pod(
+        db=db,
+        tracking_number=tracking_number,
+        action=body.action,
+        notes=body.notes,
+    )
+
+
+@router.get("/{tracking_number}/pod/receipt", response_model=schemas.PODReceiptResponse)
+def get_pod_receipt(tracking_number: str, db: Session = Depends(get_db)):
+    from ...services.pod_service import PODService
+    return PODService.get_pod_receipt(db, tracking_number)
+
+
+@router.get("/pods/list", response_model=schemas.PODListResponse)
+def list_pods(
+    status: Optional[str] = None,
+    page: int = 1,
+    limit: int = 20,
+    db: Session = Depends(get_db),
+):
+    from ...services.pod_service import PODService
+    return PODService.list_pods(db, status_filter=status, page=page, limit=limit)

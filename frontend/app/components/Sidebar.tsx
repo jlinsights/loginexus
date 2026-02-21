@@ -8,7 +8,7 @@ import {
   ChevronDown, Package, ClipboardList, Ship,
   Shield, Banknote, FileCheck, Layers,
   Brain, Eye, Leaf, Warehouse, Code2, Megaphone, LifeBuoy,
-  DollarSign, Users2, Target, BarChart3,
+  DollarSign, Users2, Target, BarChart3, ClipboardCheck,
 } from 'lucide-react';
 import { useWhitelabel } from './WhitelabelProvider';
 
@@ -61,6 +61,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
       children: [
         { name: t('allShipments'), href: '/dashboard', icon: Package },
         { name: t('booking'), href: '/shipments/booking', icon: Ship },
+        { name: t('pod') || 'POD', href: '/pod', icon: ClipboardCheck },
       ],
     },
     {

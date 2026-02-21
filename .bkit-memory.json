@@ -2,8 +2,9 @@
   "activeFeatures": ["e-POD"],
   "features": {
     "e-POD": {
-      "phase": "design",
-      "startedAt": "2026-02-21"
+      "phase": "do",
+      "startedAt": "2026-02-21",
+      "doCompletedAt": "2026-02-21"
     },
     "multi-tenant-billing": {
       "phase": "archived",

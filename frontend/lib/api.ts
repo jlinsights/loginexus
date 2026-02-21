@@ -114,6 +114,9 @@ export interface Shipment {
     is_green_certified?: boolean;
     transport_mode?: string;
     escrow_id?: string;
+    pod_status?: string | null;
+    pod_timestamp?: string | null;
+    pod_receiver_name?: string | null;
 }
 
 export interface PaginatedResponse<T> {
@@ -434,6 +437,99 @@ export const fetchUsage = async (): Promise<{
     api_calls: UsageItem;
 }> => {
     const response = await api.get('/v1/billing/usage');
+    return response.data;
+};
+
+// --- POD API ---
+
+export interface PODUploadResponse {
+    message: string;
+    status: string;
+    pod_status: string;
+    tracking_number: string;
+    pod_timestamp: string;
+    photo_count: number;
+}
+
+export interface PODDetail {
+    tracking_number: string;
+    pod_status: string | null;
+    pod_signature: string | null;
+    pod_photos: string[] | null;
+    pod_location: { lat: number; lng: number; accuracy?: number } | null;
+    pod_timestamp: string | null;
+    pod_receiver_name: string | null;
+    pod_receiver_contact: string | null;
+    pod_notes: string | null;
+    pod_verified_at: string | null;
+    pod_verified_by: string | null;
+    shipment_origin: string;
+    shipment_destination: string;
+    current_status: string;
+}
+
+export interface PODListItem {
+    tracking_number: string;
+    origin: string;
+    destination: string;
+    pod_status: string | null;
+    pod_timestamp: string | null;
+    pod_receiver_name: string | null;
+    photo_count: number;
+    current_status: string;
+}
+
+export interface PODVerifyRequest {
+    action: 'verify' | 'dispute';
+    notes?: string;
+}
+
+export const uploadPOD = async (
+    trackingNumber: string,
+    formData: FormData
+): Promise<PODUploadResponse> => {
+    const response = await api.post<PODUploadResponse>(
+        `/v1/shipments/${trackingNumber}/pod`,
+        formData,
+        { headers: { 'Content-Type': 'multipart/form-data' } }
+    );
+    return response.data;
+};
+
+export const fetchPOD = async (trackingNumber: string): Promise<PODDetail> => {
+    const response = await api.get<PODDetail>(`/v1/shipments/${trackingNumber}/pod`);
+    return response.data;
+};
+
+export const verifyPOD = async (
+    trackingNumber: string,
+    data: PODVerifyRequest
+): Promise<{ tracking_number: string; pod_status: string }> => {
+    const response = await api.post(`/v1/shipments/${trackingNumber}/pod/verify`, data);
+    return response.data;
+};
+
+export const fetchPODList = async (
+    params?: { status?: string; page?: number; limit?: number }
+): Promise<{ items: PODListItem[]; total: number; page: number; limit: number }> => {
+    const response = await api.get('/v1/shipments/pods/list', { params });
+    return response.data;
+};
+
+export interface PODReceipt {
+    tracking_number: string;
+    shipment_origin: string;
+    shipment_destination: string;
+    pod_status: string | null;
+    pod_timestamp: string | null;
+    pod_receiver_name: string | null;
+    photo_count: number;
+    verified: boolean;
+    pod_verified_at: string | null;
+}
+
+export const fetchPODReceipt = async (trackingNumber: string): Promise<PODReceipt> => {
+    const response = await api.get<PODReceipt>(`/v1/shipments/${trackingNumber}/pod/receipt`);
     return response.data;
 };
 
