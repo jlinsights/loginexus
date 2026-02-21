@@ -6,7 +6,8 @@
       "startedAt": "2026-02-21",
       "doCompletedAt": "2026-02-21",
       "checkCompletedAt": "2026-02-21",
-      "matchRate": 89
+      "matchRate": 93,
+      "iterations": 1
     },
     "multi-tenant-billing": {
       "phase": "archived",

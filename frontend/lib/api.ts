@@ -518,14 +518,15 @@ export const fetchPODList = async (
 
 export interface PODReceipt {
     tracking_number: string;
-    shipment_origin: string;
-    shipment_destination: string;
+    origin: string;
+    destination: string;
     pod_status: string | null;
     pod_timestamp: string | null;
     pod_receiver_name: string | null;
+    pod_location: { lat: number; lng: number; accuracy?: number } | null;
     photo_count: number;
     verified: boolean;
-    pod_verified_at: string | null;
+    verified_at: string | null;
 }
 
 export const fetchPODReceipt = async (trackingNumber: string): Promise<PODReceipt> => {

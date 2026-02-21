@@ -10,6 +10,8 @@ from ..core.storage import storage
 
 logger = logging.getLogger(__name__)
 
+ALLOWED_MIME_TYPES = {"image/jpeg", "image/png", "image/webp"}
+
 
 class PODService:
     """Business logic for POD operations."""
@@ -49,12 +51,20 @@ class PODService:
                 detail=f"Maximum {max_photos} photos allowed"
             )
 
-        # 4. Validate file sizes
+        # 4. Validate MIME types
+        for i, (_, content_type) in enumerate(photo_contents):
+            if content_type not in ALLOWED_MIME_TYPES:
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"Photo {i+1} has invalid type '{content_type}'. Allowed: JPEG, PNG, WebP"
+                )
+
+        # 5. Validate file sizes
         max_size = settings.POD_MAX_FILE_SIZE_MB * 1024 * 1024
         for i, (content, _) in enumerate(photo_contents):
             if len(content) > max_size:
                 raise HTTPException(
-                    status_code=400,
+                    status_code=413,
                     detail=f"Photo {i+1} exceeds {settings.POD_MAX_FILE_SIZE_MB}MB limit"
                 )
 

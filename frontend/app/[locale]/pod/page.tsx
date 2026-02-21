@@ -21,7 +21,7 @@ export default function PODManagementPage() {
                             </div>
                             <div>
                                 <h1 className="text-2xl font-bold text-slate-900">{t('podManagement')}</h1>
-                                <p className="text-sm text-slate-500">Manage and verify proof of delivery submissions</p>
+                                <p className="text-sm text-slate-500">{t('podDescription')}</p>
                             </div>
                         </div>
                         <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6">

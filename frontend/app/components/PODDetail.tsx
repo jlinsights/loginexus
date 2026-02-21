@@ -26,7 +26,7 @@ export default function PODDetail({ trackingNumber, onBack }: PODDetailProps) {
                 const data = await fetchPOD(trackingNumber);
                 setPod(data);
             } catch {
-                setError('Failed to load POD details');
+                setError(t('errors.loadFailed'));
             } finally {
                 setLoading(false);
             }
@@ -40,18 +40,18 @@ export default function PODDetail({ trackingNumber, onBack }: PODDetailProps) {
             const result = await verifyPOD(trackingNumber, { action, notes: notes || undefined });
             setPod((prev) => prev ? { ...prev, pod_status: result.pod_status } : prev);
         } catch {
-            setError(`Failed to ${action} POD`);
+            setError(t('errors.actionFailed'));
         } finally {
             setActionLoading(false);
         }
     };
 
     if (loading) {
-        return <div className="text-center py-12 text-slate-400">Loading...</div>;
+        return <div className="text-center py-12 text-slate-400">{t('loading')}</div>;
     }
 
     if (!pod) {
-        return <div className="text-center py-12 text-red-500">{error || 'POD not found'}</div>;
+        return <div className="text-center py-12 text-red-500">{error || t('notFound')}</div>;
     }
 
     const isSubmitted = pod.pod_status === 'submitted';
@@ -192,7 +192,7 @@ export default function PODDetail({ trackingNumber, onBack }: PODDetailProps) {
                         <textarea
                             value={notes}
                             onChange={(e) => setNotes(e.target.value)}
-                            placeholder="Enter verification notes..."
+                            placeholder={t('notesPlaceholder')}
                             rows={3}
                             className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none"
                         />

@@ -163,6 +163,17 @@
     "verifiedBy": "Verified by",
     "noPhotos": "No photos uploaded",
     "noPods": "No POD submissions found",
+    "verified": "Verified",
+    "delivered": "Delivered",
+    "status": "Status",
+    "time": "Time",
+    "loading": "Loading...",
+    "notFound": "Not found",
+    "deliveryReceipt": "Delivery Receipt",
+    "filesUnit": "files",
+    "photosMax": "Maximum {max} photos allowed",
+    "podDescription": "Manage and verify proof of delivery submissions",
+    "notesPlaceholder": "Enter verification notes...",
     "errors": {
       "signatureRequired": "Please sign the digital pad.",
       "receiverNameRequired": "Please enter the receiver's name.",
@@ -170,7 +181,11 @@
       "geoFailed": "Unable to retrieve location. Please enable location services.",
       "uploadFailed": "Failed to submit Proof of Delivery. Please try again.",
       "alreadySubmitted": "POD has already been submitted for this shipment.",
-      "fileTooLarge": "Photo is too large. Maximum size is 5MB."
+      "fileTooLarge": "Photo is too large. Maximum size is 5MB.",
+      "loadFailed": "Failed to load POD details.",
+      "actionFailed": "Failed to process POD action.",
+      "receiptNotAvailable": "Receipt not available.",
+      "invalidFileType": "Invalid file type. Only JPEG, PNG, and WebP are allowed."
     }
   }
 }

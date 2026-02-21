@@ -71,7 +71,7 @@ export default function PODList({ onSelect }: PODListProps) {
 
             {/* Table */}
             {loading ? (
-                <div className="text-center py-12 text-slate-400">Loading...</div>
+                <div className="text-center py-12 text-slate-400">{t('loading')}</div>
             ) : items.length === 0 ? (
                 <div className="text-center py-12 text-slate-400">{t('noPods')}</div>
             ) : (
@@ -79,12 +79,12 @@ export default function PODList({ onSelect }: PODListProps) {
                     <table className="w-full text-sm">
                         <thead>
                             <tr className="border-b border-slate-200 text-left text-slate-500">
-                                <th className="pb-3 font-medium">Tracking #</th>
+                                <th className="pb-3 font-medium">{t('tracking')}</th>
                                 <th className="pb-3 font-medium">{t('route')}</th>
-                                <th className="pb-3 font-medium">Status</th>
+                                <th className="pb-3 font-medium">{t('status')}</th>
                                 <th className="pb-3 font-medium">{t('receiver')}</th>
                                 <th className="pb-3 font-medium">{t('photoEvidence')}</th>
-                                <th className="pb-3 font-medium">Time</th>
+                                <th className="pb-3 font-medium">{t('time')}</th>
                             </tr>
                         </thead>
                         <tbody>

@@ -163,6 +163,17 @@
     "verifiedBy": "검증자",
     "noPhotos": "업로드된 사진 없음",
     "noPods": "제출된 POD가 없습니다",
+    "verified": "검증 완료",
+    "delivered": "배송 완료",
+    "status": "상태",
+    "time": "시간",
+    "loading": "로딩 중...",
+    "notFound": "찾을 수 없음",
+    "deliveryReceipt": "배송 영수증",
+    "filesUnit": "파일",
+    "photosMax": "최대 {max}장까지 업로드 가능",
+    "podDescription": "배송 증빙(POD) 제출을 관리하고 검증합니다",
+    "notesPlaceholder": "검증 메모를 입력하세요...",
     "errors": {
       "signatureRequired": "디지털 패드에 서명해 주세요.",
       "receiverNameRequired": "수취인 이름을 입력해 주세요.",
@@ -170,7 +181,11 @@
       "geoFailed": "위치 정보를 가져올 수 없습니다. 위치 서비스를 활성화해 주세요.",
       "uploadFailed": "배송 증빙 제출에 실패했습니다. 다시 시도해 주세요.",
       "alreadySubmitted": "이 화물에 대한 POD가 이미 제출되었습니다.",
-      "fileTooLarge": "사진이 너무 큽니다. 최대 크기는 5MB입니다."
+      "fileTooLarge": "사진이 너무 큽니다. 최대 크기는 5MB입니다.",
+      "loadFailed": "POD 상세 정보를 불러올 수 없습니다.",
+      "actionFailed": "POD 처리에 실패했습니다.",
+      "receiptNotAvailable": "영수증을 사용할 수 없습니다.",
+      "invalidFileType": "잘못된 파일 형식입니다. JPEG, PNG, WebP만 허용됩니다."
     }
   }
 }
