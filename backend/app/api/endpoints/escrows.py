@@ -24,10 +24,19 @@ def create_escrow(request: Request, escrow: schemas.EscrowCreate, db: Session = 
     if existing:
         raise HTTPException(status_code=409, detail="Escrow already exists for this shipment")
 
+    # Usage enforcement: check escrow limit
+    from ...services.billing_service import BillingService
+    if shipment.tenant_id:
+        BillingService.check_plan_limit(db, shipment.tenant_id, "escrows")
+
     db_escrow = models.PaymentEscrow(**escrow.model_dump())
     db.add(db_escrow)
     db.commit()
     db.refresh(db_escrow)
+
+    # Increment escrow usage counter
+    if shipment.tenant_id:
+        BillingService.increment_usage(db, shipment.tenant_id, "escrows")
 
     log = models.AuditLog(
         entity_type="ESCROW",

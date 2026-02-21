@@ -69,6 +69,8 @@ class TenantCreate(TenantBase):
 
 class TenantResponse(TenantBase):
     id: UUID
+    plan_tier: Optional[str] = "free"
+    subscription_status: Optional[str] = "active"
     created_at: Optional[datetime] = None
 
     model_config = ConfigDict(from_attributes=True)
@@ -186,6 +188,82 @@ class TokenPayload(BaseModel):
     tenant_id: str
     role: str
     exp: int
+
+# --- Billing Schemas ---
+
+class PlanLimits(BaseModel):
+    shipments_per_month: int
+    users: int
+    escrows: int
+    api_rate_limit: int
+
+class PlanFeatures(BaseModel):
+    analytics: str
+    whitelabel: bool
+    email_support: bool
+    webhook_notifications: bool
+
+class PlanInfo(BaseModel):
+    tier: str
+    name: str
+    price_monthly: int
+    price_id: Optional[str] = None
+    limits: PlanLimits
+    features: PlanFeatures
+
+class PlansResponse(BaseModel):
+    plans: List[PlanInfo]
+
+class CheckoutRequest(BaseModel):
+    price_id: str
+
+class CheckoutResponse(BaseModel):
+    checkout_url: str
+    session_id: str
+
+class PortalRequest(BaseModel):
+    return_url: str = "/billing"
+
+class PortalResponse(BaseModel):
+    portal_url: str
+
+class UsageItem(BaseModel):
+    used: int
+    limit: int
+    percentage: float
+
+class SubscriptionResponse(BaseModel):
+    tenant_id: UUID
+    plan_tier: str
+    subscription_status: str
+    billing_period_start: Optional[datetime] = None
+    billing_period_end: Optional[datetime] = None
+    usage: dict
+    stripe_subscription_id: Optional[str] = None
+
+class UsageResponse(BaseModel):
+    period_start: Optional[datetime] = None
+    period_end: Optional[datetime] = None
+    shipments: UsageItem
+    users: UsageItem
+    escrows: UsageItem
+    api_calls: UsageItem
+
+class InvoiceInfo(BaseModel):
+    id: str
+    amount_due: int
+    amount_paid: int
+    currency: str
+    status: Optional[str] = None
+    invoice_url: Optional[str] = None
+    invoice_pdf: Optional[str] = None
+    period_start: Optional[datetime] = None
+    period_end: Optional[datetime] = None
+    created: Optional[datetime] = None
+
+class InvoicesResponse(BaseModel):
+    invoices: List[InvoiceInfo]
+    has_more: bool
 
 # --- Rate Subscription Schemas ---
 

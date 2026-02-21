@@ -342,4 +342,99 @@ export const createRateSubscription = async (data: RateSubscriptionCreate): Prom
     return response.data;
 };
 
+// --- Billing API ---
+
+export interface PlanLimits {
+    shipments_per_month: number;
+    users: number;
+    escrows: number;
+    api_rate_limit: number;
+}
+
+export interface PlanFeatures {
+    analytics: string;
+    whitelabel: boolean;
+    email_support: boolean;
+    webhook_notifications: boolean;
+}
+
+export interface Plan {
+    tier: string;
+    name: string;
+    price_monthly: number;
+    price_id: string | null;
+    limits: PlanLimits;
+    features: PlanFeatures;
+}
+
+export interface UsageItem {
+    used: number;
+    limit: number;
+    percentage: number;
+}
+
+export interface SubscriptionInfo {
+    tenant_id: string;
+    plan_tier: string;
+    subscription_status: string;
+    billing_period_start: string | null;
+    billing_period_end: string | null;
+    usage: {
+        shipments: { used: number; limit: number };
+        users: { used: number; limit: number };
+        escrows: { used: number; limit: number };
+    };
+    stripe_subscription_id: string | null;
+}
+
+export interface Invoice {
+    id: string;
+    amount_due: number;
+    amount_paid: number;
+    currency: string;
+    status: string | null;
+    invoice_url: string | null;
+    invoice_pdf: string | null;
+    period_start: string | null;
+    period_end: string | null;
+    created: string | null;
+}
+
+export const fetchPlans = async (): Promise<{ plans: Plan[] }> => {
+    const response = await api.get<{ plans: Plan[] }>('/v1/billing/plans');
+    return response.data;
+};
+
+export const fetchSubscription = async (): Promise<SubscriptionInfo> => {
+    const response = await api.get<SubscriptionInfo>('/v1/billing/subscription');
+    return response.data;
+};
+
+export const createCheckoutSession = async (priceId: string): Promise<{ checkout_url: string; session_id: string }> => {
+    const response = await api.post<{ checkout_url: string; session_id: string }>('/v1/billing/checkout', { price_id: priceId });
+    return response.data;
+};
+
+export const createPortalSession = async (returnUrl: string = '/billing'): Promise<{ portal_url: string }> => {
+    const response = await api.post<{ portal_url: string }>('/v1/billing/portal', { return_url: returnUrl });
+    return response.data;
+};
+
+export const fetchInvoices = async (limit = 10): Promise<{ invoices: Invoice[]; has_more: boolean }> => {
+    const response = await api.get<{ invoices: Invoice[]; has_more: boolean }>(`/v1/billing/invoices?limit=${limit}`);
+    return response.data;
+};
+
+export const fetchUsage = async (): Promise<{
+    period_start: string | null;
+    period_end: string | null;
+    shipments: UsageItem;
+    users: UsageItem;
+    escrows: UsageItem;
+    api_calls: UsageItem;
+}> => {
+    const response = await api.get('/v1/billing/usage');
+    return response.data;
+};
+
 export default api;

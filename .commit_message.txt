@@ -1,1 +1,1 @@
-📐 docs(pdca): multi-tenant-billing Design 문서 생성 (Stripe Checkout, 사용량 제한, 웹훅 처리, 빌링 UI)
+🏗️ feat(billing): multi-tenant-billing 구현 (Stripe 구독, 사용량 제한, 웹훅, 빌링 대시보드/가격표 UI)

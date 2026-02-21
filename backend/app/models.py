@@ -12,6 +12,15 @@ class Tenant(Base):
     logo_url = Column(String)
     primary_color = Column(String, default="#1E40AF")
     contact_email = Column(String)
+
+    # Billing fields
+    stripe_customer_id = Column(String, nullable=True, unique=True)
+    plan_tier = Column(String, default="free")  # free | pro | enterprise
+    subscription_status = Column(String, default="active")  # active | past_due | canceled | trialing
+    stripe_subscription_id = Column(String, nullable=True, unique=True)
+    billing_period_start = Column(DateTime(timezone=True), nullable=True)
+    billing_period_end = Column(DateTime(timezone=True), nullable=True)
+
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 
@@ -92,6 +101,31 @@ class User(Base):
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+
+class UsageRecord(Base):
+    __tablename__ = "usage_records"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, server_default=text("uuid_generate_v4()"))
+    tenant_id = Column(UUID(as_uuid=True), ForeignKey("tenants.id", ondelete="CASCADE"), nullable=False)
+    period_start = Column(DateTime(timezone=True), nullable=False)
+    period_end = Column(DateTime(timezone=True), nullable=False)
+    shipment_count = Column(Integer, default=0)
+    user_count = Column(Integer, default=0)
+    escrow_count = Column(Integer, default=0)
+    api_call_count = Column(Integer, default=0)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+
+
+class WebhookEvent(Base):
+    __tablename__ = "webhook_events"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, server_default=text("uuid_generate_v4()"))
+    stripe_event_id = Column(String, unique=True, nullable=False, index=True)
+    event_type = Column(String, nullable=False)
+    processed_at = Column(DateTime(timezone=True), server_default=func.now())
+    payload = Column(JSONB)
+
 
 class RateSubscription(Base):
     __tablename__ = "rate_subscriptions"

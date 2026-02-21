@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from .endpoints import analytics, auth, escrows, health, rates, shipments, tenants, users
+from .endpoints import analytics, auth, billing, escrows, health, rates, shipments, tenants, users
 
 # Versioned router
 v1_router = APIRouter()
@@ -11,6 +11,7 @@ v1_router.include_router(escrows.router, prefix="/escrows", tags=["escrows"])
 v1_router.include_router(analytics.router, prefix="/analytics", tags=["analytics"])
 v1_router.include_router(users.router, prefix="/users", tags=["users"])
 v1_router.include_router(rates.router, prefix="/rates", tags=["rates"])
+v1_router.include_router(billing.router, prefix="/billing", tags=["billing"])
 
 # Top-level API router
 api_router = APIRouter()

@@ -116,7 +116,11 @@ def create_shipment(request: Request, shipment: schemas.ShipmentCreate, db: Sess
     tenant = db.query(models.Tenant).filter(models.Tenant.id == shipment.tenant_id).first()
     if not tenant:
         raise HTTPException(status_code=404, detail="Tenant not found")
-    
+
+    # 1.5 Usage enforcement: check shipment limit
+    from ...services.billing_service import BillingService
+    BillingService.check_plan_limit(db, shipment.tenant_id, "shipments")
+
     # 2. Create Shipment
     shipment_data = shipment.model_dump()
     
@@ -135,6 +139,9 @@ def create_shipment(request: Request, shipment: schemas.ShipmentCreate, db: Sess
     db.commit()
     db.refresh(new_shipment)
     
+    # 2.5 Increment usage counter
+    BillingService.increment_usage(db, shipment.tenant_id, "shipments")
+
     # 3. Create Audit Log
     try:
         log = models.AuditLog(

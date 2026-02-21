@@ -103,6 +103,14 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
     { name: t('marketing'), href: '/marketing', icon: Target },
     { name: t('fulfillment'), href: '/fulfillment', icon: Warehouse },
     { name: t('changelog'), href: '/changelog', icon: Megaphone },
+    {
+      name: t('billing') || 'Billing',
+      icon: Banknote,
+      children: [
+        { name: t('billingOverview') || 'Overview', href: '/billing', icon: Banknote },
+        { name: t('plans') || 'Plans', href: '/billing/pricing', icon: DollarSign },
+      ],
+    },
     { name: t('support'), href: '/support', icon: LifeBuoy },
     { name: t('settings'), href: '/settings', icon: Settings },
   ];

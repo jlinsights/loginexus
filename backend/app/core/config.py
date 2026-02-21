@@ -41,6 +41,13 @@ class Settings(BaseSettings):
         alias="NEXT_PUBLIC_LOGISTICS_ESCROW_ADDRESS",
     )
 
+    # --- Billing (Stripe) ---
+    STRIPE_SECRET_KEY: str = ""
+    STRIPE_WEBHOOK_SECRET: str = ""
+    STRIPE_PRICE_PRO: str = ""
+    STRIPE_PRICE_ENTERPRISE: str = ""
+    BILLING_ENABLED: bool = True
+
     # --- Logging ---
     LOG_LEVEL: str = "INFO"
     LOG_FORMAT: str = "json"  # json | console

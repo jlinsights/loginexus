@@ -11,3 +11,4 @@ python-jose[cryptography]
 bcrypt
 slowapi
 structlog
+stripe>=7.0.0
