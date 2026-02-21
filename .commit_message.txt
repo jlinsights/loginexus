@@ -1,1 +1,1 @@
-🏗️ feat(billing): multi-tenant-billing 구현 (Stripe 구독, 사용량 제한, 웹훅, 빌링 대시보드/가격표 UI)
+📊 check(billing): multi-tenant-billing Gap 분석 완료 (매치율 92.2%, 10개 카테고리 검증)

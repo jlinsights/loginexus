@@ -5,10 +5,12 @@
   "primaryFeature": "multi-tenant-billing",
   "features": {
     "multi-tenant-billing": {
-      "phase": "do",
+      "phase": "check",
       "startedAt": "2026-02-21T00:00:00.000Z",
       "planDoc": "docs/01-plan/features/multi-tenant-billing.plan.md",
-      "designDoc": "docs/02-design/features/multi-tenant-billing.design.md"
+      "designDoc": "docs/02-design/features/multi-tenant-billing.design.md",
+      "analysisDoc": "docs/03-analysis/multi-tenant-billing.analysis.md",
+      "matchRate": 92.2
     },
     "architecture-design": {
       "phase": "archived",
