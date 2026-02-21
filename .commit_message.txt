@@ -1,1 +1,1 @@
-📋 docs(pdca): multi-tenant-billing Plan 문서 생성 (Stripe 구독 결제, 사용량 계량, 3단계 요금제)
+📐 docs(pdca): multi-tenant-billing Design 문서 생성 (Stripe Checkout, 사용량 제한, 웹훅 처리, 빌링 UI)
