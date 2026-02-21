@@ -2,10 +2,11 @@
   "activeFeatures": ["e-POD"],
   "features": {
     "e-POD": {
-      "phase": "check",
+      "phase": "completed",
       "startedAt": "2026-02-21",
       "doCompletedAt": "2026-02-21",
       "checkCompletedAt": "2026-02-21",
+      "completedAt": "2026-02-21",
       "matchRate": 93,
       "iterations": 1
     },
