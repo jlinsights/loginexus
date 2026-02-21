@@ -2,9 +2,11 @@
   "activeFeatures": ["e-POD"],
   "features": {
     "e-POD": {
-      "phase": "do",
+      "phase": "check",
       "startedAt": "2026-02-21",
-      "doCompletedAt": "2026-02-21"
+      "doCompletedAt": "2026-02-21",
+      "checkCompletedAt": "2026-02-21",
+      "matchRate": 89
     },
     "multi-tenant-billing": {
       "phase": "archived",

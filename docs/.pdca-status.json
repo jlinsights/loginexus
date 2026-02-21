@@ -5,10 +5,12 @@
   "primaryFeature": "e-POD",
   "features": {
     "e-POD": {
-      "phase": "do",
+      "phase": "check",
       "startedAt": "2026-02-21T00:00:00.000Z",
       "planDoc": "docs/01-plan/features/e-POD.plan.md",
-      "designDoc": "docs/02-design/features/e-POD.design.md"
+      "designDoc": "docs/02-design/features/e-POD.design.md",
+      "analysisDoc": "docs/03-analysis/e-POD.analysis.md",
+      "matchRate": 89
     },
     "multi-tenant-billing": {
       "phase": "archived",
