@@ -1,1 +1,1 @@
-📋 plan(e-POD): e-POD 기능 강화 Plan 문서 작성 완료 (4단계 구현 계획)
+📐 design(e-POD): e-POD Design 문서 작성 완료 (API 5개, 컴포넌트 4개, 서비스 레이어 설계)
