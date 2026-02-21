@@ -1,1 +1,1 @@
-📦 chore(pdca): architecture-design PDCA 아카이브 완료 (Plan/Design/Analysis/Report → docs/archive/2026-02/)
+📋 docs(pdca): multi-tenant-billing Plan 문서 생성 (Stripe 구독 결제, 사용량 계량, 3단계 요금제)
