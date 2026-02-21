@@ -1,0 +1,39 @@
+{
+  "timestamp": "2026-02-21T00:36:19.395Z",
+  "reason": "compaction",
+  "status": {
+    "version": "2.0",
+    "lastUpdated": "2026-02-20T22:52:49.765Z",
+    "activeFeatures": [],
+    "primaryFeature": "multi-tenant-billing",
+    "features": {
+      "multi-tenant-billing": {
+        "phase": "archived",
+        "startedAt": "2026-02-21T00:00:00.000Z",
+        "completedAt": "2026-02-21",
+        "archivedAt": "2026-02-21",
+        "archivedTo": "docs/archive/2026-02/multi-tenant-billing/",
+        "matchRate": 92.2
+      },
+      "architecture-design": {
+        "phase": "archived",
+        "startedAt": "2026-02-21T00:00:00.000Z",
+        "completedAt": "2026-02-21",
+        "archivedAt": "2026-02-21",
+        "archivedTo": "docs/archive/2026-02/architecture-design/",
+        "matchRate": 93
+      }
+    },
+    "pipeline": {
+      "currentPhase": 1,
+      "level": "Dynamic",
+      "phaseHistory": []
+    },
+    "session": {
+      "startedAt": "2026-02-20T22:52:49.765Z",
+      "onboardingCompleted": false,
+      "lastActivity": "2026-02-20T22:52:49.765Z"
+    },
+    "history": []
+  }
+}
