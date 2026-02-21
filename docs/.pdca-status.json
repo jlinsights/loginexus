@@ -1,17 +1,15 @@
 {
   "version": "2.0",
   "lastUpdated": "2026-02-21T10:00:00.000Z",
-  "activeFeatures": ["e-POD"],
-  "primaryFeature": "e-POD",
+  "activeFeatures": [],
+  "primaryFeature": null,
   "features": {
     "e-POD": {
-      "phase": "completed",
+      "phase": "archived",
       "startedAt": "2026-02-21T00:00:00.000Z",
       "completedAt": "2026-02-21",
-      "planDoc": "docs/01-plan/features/e-POD.plan.md",
-      "designDoc": "docs/02-design/features/e-POD.design.md",
-      "analysisDoc": "docs/03-analysis/e-POD.analysis.md",
-      "reportDoc": "docs/04-report/features/e-POD.report.md",
+      "archivedAt": "2026-02-21",
+      "archivedTo": "docs/archive/2026-02/e-POD/",
       "matchRate": 93,
       "iterations": 1
     },

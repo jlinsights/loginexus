@@ -1,12 +1,14 @@
 {
-  "activeFeatures": ["e-POD"],
+  "activeFeatures": [],
   "features": {
     "e-POD": {
-      "phase": "completed",
+      "phase": "archived",
       "startedAt": "2026-02-21",
       "doCompletedAt": "2026-02-21",
       "checkCompletedAt": "2026-02-21",
       "completedAt": "2026-02-21",
+      "archivedAt": "2026-02-21",
+      "archivedTo": "docs/archive/2026-02/e-POD/",
       "matchRate": 93,
       "iterations": 1
     },
