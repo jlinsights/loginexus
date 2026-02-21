@@ -2,8 +2,9 @@
   "activeFeatures": ["multi-tenant-billing"],
   "features": {
     "multi-tenant-billing": {
-      "phase": "check",
+      "phase": "completed",
       "startedAt": "2026-02-21",
+      "completedAt": "2026-02-21",
       "matchRate": 92.2
     },
     "architecture-design": {
