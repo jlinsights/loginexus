@@ -1,17 +1,15 @@
 {
   "version": "2.0",
   "lastUpdated": "2026-02-20T22:52:49.765Z",
-  "activeFeatures": ["multi-tenant-billing"],
+  "activeFeatures": [],
   "primaryFeature": "multi-tenant-billing",
   "features": {
     "multi-tenant-billing": {
-      "phase": "completed",
+      "phase": "archived",
       "startedAt": "2026-02-21T00:00:00.000Z",
       "completedAt": "2026-02-21",
-      "planDoc": "docs/01-plan/features/multi-tenant-billing.plan.md",
-      "designDoc": "docs/02-design/features/multi-tenant-billing.design.md",
-      "analysisDoc": "docs/03-analysis/multi-tenant-billing.analysis.md",
-      "reportDoc": "docs/04-report/features/multi-tenant-billing.report.md",
+      "archivedAt": "2026-02-21",
+      "archivedTo": "docs/archive/2026-02/multi-tenant-billing/",
       "matchRate": 92.2
     },
     "architecture-design": {

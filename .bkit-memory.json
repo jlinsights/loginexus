@@ -1,10 +1,12 @@
 {
-  "activeFeatures": ["multi-tenant-billing"],
+  "activeFeatures": [],
   "features": {
     "multi-tenant-billing": {
-      "phase": "completed",
+      "phase": "archived",
       "startedAt": "2026-02-21",
       "completedAt": "2026-02-21",
+      "archivedAt": "2026-02-21",
+      "archivedTo": "docs/archive/2026-02/multi-tenant-billing/",
       "matchRate": 92.2
     },
     "architecture-design": {
