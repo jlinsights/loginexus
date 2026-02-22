@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Ship, ArrowLeft, ArrowRight } from 'lucide-react'
 
 const TOOLS = [
+  { href: '/tools/market', label: 'Market Dashboard' },
   { href: '/tools/rate-explorer', label: '운임 탐색기' },
   { href: '/tools/hs-codes', label: 'HS Code 조회' },
   { href: '/tools/glossary', label: '물류 용어 사전' },

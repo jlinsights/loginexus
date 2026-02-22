@@ -42,6 +42,18 @@
         "feature2": "Automated Ops",
         "feature3": "Global Network"
       }
+    },
+    "Widget": {
+      "quickQuote": "Quick Quote",
+      "realTimeQuote": "Real-time Quote",
+      "origin": "Origin port",
+      "destination": "Destination port",
+      "checkRate": "Check Freight Rates",
+      "recentQuotes": "<span class=\"text-blue-600 dark:text-blue-400 font-bold\">{count} quotes</span> checked in the last 24h."
+    },
+    "RoleToggle": {
+      "shipper": "Shipper",
+      "forwarder": "Forwarder / Logistics"
     }
   },
   "Navigation": {
@@ -114,6 +126,25 @@
     "settings": "Settings",
     "menu": "Menu",
     "pod": "POD"
+  },
+  "ServiceCategory": {
+    "title": "Service Categories",
+    "ocean": {
+      "label": "Ocean Freight",
+      "desc": "FCL / LCL Shipping"
+    },
+    "air": {
+      "label": "Air Freight",
+      "desc": "Express Delivery"
+    },
+    "inland": {
+      "label": "Inland Transport",
+      "desc": "Trucking / Rail"
+    },
+    "warehouse": {
+      "label": "Warehousing",
+      "desc": "Storage / Fulfillment"
+    }
   },
   "Shipment": {
     "id": "Shipment ID",

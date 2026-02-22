@@ -1,6 +1,6 @@
 from pydantic import BaseModel, ConfigDict
 from typing import Optional, List, Any
-from datetime import datetime
+from datetime import datetime, date
 from uuid import UUID
 from enum import Enum
 
@@ -271,6 +271,94 @@ class InvoicesResponse(BaseModel):
     invoices: List[InvoiceInfo]
     has_more: bool
 
+# --- Market Intelligence Schemas ---
+
+class FreightIndexData(BaseModel):
+    index_code: str
+    index_name: str
+    value: float
+    change_pct: float
+    recorded_at: date
+    sparkline: List[float] = []
+
+    model_config = ConfigDict(from_attributes=True)
+
+class IndicesResponse(BaseModel):
+    indices: List[FreightIndexData]
+
+class IndexHistoryPoint(BaseModel):
+    date: date
+    value: float
+    change_pct: float
+
+class IndexHistoryResponse(BaseModel):
+    index_code: str
+    index_name: str
+    period: str
+    data: List[IndexHistoryPoint]
+
+class RouteRateData(BaseModel):
+    origin: str
+    destination: str
+    mode: str
+    carrier: Optional[str] = None
+    container_type: Optional[str] = None
+    rate_usd: float
+    transit_days_min: Optional[int] = None
+    transit_days_max: Optional[int] = None
+    valid_from: date
+    valid_to: Optional[date] = None
+
+    model_config = ConfigDict(from_attributes=True)
+
+class RatesResponse(BaseModel):
+    rates: List[RouteRateData]
+    total: int
+    origin: Optional[str] = None
+    destination: Optional[str] = None
+    mode: Optional[str] = None
+
+class RouteCompareItem(BaseModel):
+    origin: str
+    destination: str
+    avg_rate_usd: float
+    min_rate_usd: float
+    max_rate_usd: float
+    carrier_count: int
+    latest_valid_from: Optional[date] = None
+
+class RatesCompareResponse(BaseModel):
+    routes: List[RouteCompareItem]
+    mode: Optional[str] = None
+
+class TrendDataPoint(BaseModel):
+    date: date
+    avg_rate: float
+    volume: int
+
+class TrendSummary(BaseModel):
+    trend_direction: str  # up, down, stable
+    period_change_pct: float
+    avg_rate: float
+    total_data_points: int
+
+class TrendsResponse(BaseModel):
+    period: str
+    mode: Optional[str] = None
+    data: List[TrendDataPoint]
+    summary: TrendSummary
+
+class InsightData(BaseModel):
+    type: str
+    title: str
+    description: str
+    severity: str  # info, warning, opportunity
+    data: dict = {}
+
+class InsightsResponse(BaseModel):
+    insights: List[InsightData]
+    generated_at: datetime
+
 # --- Rate Subscription Schemas ---
 
 class RateSubscriptionBase(BaseModel):
@@ -278,6 +366,7 @@ class RateSubscriptionBase(BaseModel):
     destination: str
     target_price: float
     alert_frequency: str = "daily"
+    mode: str = "ocean_fcl"
 
 class RateSubscriptionCreate(RateSubscriptionBase):
     tenant_id: UUID

@@ -1,47 +1,59 @@
 {
   "HomePage": {
-    "title": "물류의 모든 것,<br /><span class=\"text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400\">하나의 플랫폼</span>에서",
-    "subtitle": "견적부터 부킹, 실시간 추적, 블록체인 정산까지.<br />LogiNexus로 복잡한 국제 물류를 쉽고 간편하게 관리하세요.",
-    "startForFree": "무료로 시작하기",
-    "contactSales": "도입 문의",
-    "blockchainBadge": "블록체인 기반 차세대 물류 플랫폼",
-    "banner": "LogiNexus AI 견적 엔진 베타 출시! 실시간 운임 비교를 경험하세요",
+    "title": "글로벌 물류의 새로운 기준,<br /><span class=\"text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400\">LogiNexus</span>",
+    "subtitle": "실시간 견적 비교부터 부킹, 가시성 확보, 에스크로 정산까지.<br />데이터와 블록체인 기술로 복잡한 물류 경험을 혁신합니다.",
+    "startForFree": "서비스 시작하기",
+    "contactSales": "무료 컨설팅 받기",
+    "blockchainBadge": "차세대 스마트 물류 · 블록체인 정산",
+    "banner": "LogiNexus AI 견적 엔진 베타 출시! 실시간 운임 비교 분석을 경험하세요",
     "start": "지금 시작",
     "solutions": {
       "transport": {
         "title": "운송 솔루션",
-        "ocean": { "title": "해상 FCL/LCL", "desc": "글로벌 주요 항로 실시간 운임 비교 및 예약" },
-        "air": { "title": "항공 특송", "desc": "긴급 화물, 위험물, 냉장 화물 특수 운송" },
-        "trucking": { "title": "복합 운송", "desc": "Sea-Air, Rail-Sea 등 최적 경로 조합" }
+        "ocean": { "title": "해상 운송 (FCL/LCL)", "desc": "글로벌 주요 선사 실시간 운임 비교 및 확정 부킹" },
+        "air": { "title": "항공 운송", "desc": "긴급 화물, 콜드체인, 위험물 등 맞춤형 특수 운송" },
+        "trucking": { "title": "내륙 및 복합 운송", "desc": "도어-투-도어(Door-to-Door) 최적의 운송 경로 설계" }
       },
       "manage": {
-        "title": "기술 플랫폼",
-        "digital": { "title": "실시간 트래킹", "desc": "선박 AIS · IoT 센서 기반 화물 위치 추적" },
-        "tracking": { "title": "블록체인 정산", "desc": "스마트 컨트랙트 기반 에스크로 결제" },
-        "settlement": { "title": "AI 견적 엔진", "desc": "과거 데이터 기반 최적 운임 추천" }
+        "title": "운영 가시성",
+        "digital": { "title": "디지털 트래킹", "desc": "AIS 및 IoT 기반 전 세계 화물 실시간 위치 모니터링" },
+        "tracking": { "title": "스마트 에스크로", "desc": "블록체인 스마트 컨트랙트를 통한 투명하고 안전한 결제" },
+        "settlement": { "title": "AI 견적 엔진", "desc": "10년 이상의 과거 데이터 기반 최적 운임 및 리드타임 추천" }
       },
       "finance": {
-        "title": "물류 컨설팅",
-        "scf": { "title": "공급망 최적화", "desc": "리드타임 단축 · 재고 최적화 전략 수립" },
-        "insurance": { "title": "통관 자문", "desc": "FTA 활용, HS 코드 분류, 관세 절감" },
-        "payment": { "title": "위험 관리", "desc": "해상 보험, 클레임 처리, 컴플라이언스" }
+        "title": "무역 서비스",
+        "scf": { "title": "공급망 금융 (SCF)", "desc": "결제 리스크를 낮추고 현금 흐름을 개선하는 금융 솔루션" },
+        "insurance": { "title": "디지털 통관", "desc": "복잡한 세관 신고 자동화 및 적법성 검토" },
+        "payment": { "title": "적하 보험", "desc": "운송 중 발생할 수 있는 리스크 대비 맞춤형 보험 설계" }
       }
     },
     "segments": {
       "shipper": {
-        "title": "화주/수출입 기업을 위한",
-        "desc": "복잡한 물류 프로세스를 자동화하고 물류비를 절감하세요.",
-        "feature1": "운임 비교 견적",
-        "feature2": "화물 실시간 추적",
-        "feature3": "안전한 결제"
+        "title": "수출입 화주 (Shipper)",
+        "desc": "견적 비교부터 정산까지, 파편화된 물류 업무를 디지털화하여 물류비를 절감하고 업무 효율을 높이세요.",
+        "feature1": "디지털 비교 견적",
+        "feature2": "가시성 통합 대시보드",
+        "feature3": "에스크로 안전 결제"
       },
       "forwarder": {
-        "title": "포워더/물류사를 위한",
-        "desc": "영업을 디지털화하고 운영 효율을 극대화하세요.",
-        "feature1": "고객 관리 CRM",
-        "feature2": "자동화된 운영",
-        "feature3": "글로벌 네트워크"
+        "title": "물류 실행사 (Forwarder)",
+        "desc": "영업 기회 발굴부터 서류 작업 자동화까지. 스마트한 디지털 포워딩 솔루션으로 성장을 가속화하세요.",
+        "feature1": "영업 파이프라인 관리",
+        "feature2": "선적 서류 자동화",
+        "feature3": "글로벌 파트너 네트워크"
       }
+    },
+    "Widget": {
+      "quickQuote": "빠른 운임 조회",
+      "realTimeQuote": "Real-time Quote",
+      "origin": "출발지 선택 (Origin)",
+      "destination": "도착지 선택 (Destination)",
+      "checkRate": "운임 조회하기",
+      "recentQuotes": "최근 24시간 내 <span class=\"text-blue-600 dark:text-blue-400 font-bold\">{count}건</span>의 견적이 조회되었습니다."
+    },
+    "RoleToggle": {
+      "shipper": "화주 (Shipper)",
+      "forwarder": "포워더 (Forwarder)"
     }
   },
   "Navigation": {
@@ -88,32 +100,51 @@
     "dashboard": "대시보드",
     "overview": "개요",
     "controlTower": "관제탑",
-    "analytics": "분석",
+    "analytics": "분석/통계",
     "shipments": "선적 관리",
-    "allShipments": "전체 선적",
-    "booking": "부킹",
-    "orders": "발주 관리",
-    "orderManagement": "발주 현황",
-    "consolidation": "혼적(Consol) 관리",
-    "tracking": "화물 추적",
-    "finance": "재무/정산",
+    "allShipments": "전체 선적건",
+    "booking": "스마트 부킹",
+    "orders": "발주/오더",
+    "orderManagement": "오더 현황",
+    "consolidation": "콘솔 (Consolidation)",
+    "tracking": "엔드투엔드 추적",
+    "finance": "재무 및 정산",
     "customs": "통관 관리",
-    "insurance": "적하보험",
-    "tradeFinance": "무역 금융",
-    "intelligence": "인텔리전스",
-    "aiAnalytics": "AI 분석",
-    "aiQuote": "AI 견적",
-    "developerApi": "개발자 API",
+    "insurance": "적하 보험",
+    "tradeFinance": "무역 금융 (SCF)",
+    "intelligence": "마켓 인텔리전스",
+    "aiAnalytics": "데이터 분석",
+    "aiQuote": "스마트 견적",
+    "developerApi": "개발자 메뉴 (API)",
     "esg": "ESG 경영",
-    "carbonControl": "탄소 관리",
-    "partners": "파트너",
-    "marketing": "마케팅",
+    "carbonControl": "탄소 배출 추적",
+    "partners": "파트너 네트워크",
+    "marketing": "영업 관측소",
     "fulfillment": "풀필먼트",
-    "changelog": "변경 이력",
-    "support": "고객 지원",
-    "settings": "설정",
-    "menu": "메뉴",
-    "pod": "배송증빙"
+    "changelog": "버전/이력 관리",
+    "support": "헬프 데스크",
+    "settings": "개인 설정",
+    "menu": "전체 메뉴",
+    "pod": "인수증 (POD)"
+  },
+  "ServiceCategory": {
+    "title": "서비스 카테고리",
+    "ocean": {
+      "label": "해상 운송",
+      "desc": "Ocean Freight"
+    },
+    "air": {
+      "label": "항공 운송",
+      "desc": "Air Freight"
+    },
+    "inland": {
+      "label": "내륙 운송",
+      "desc": "Inland Transport"
+    },
+    "warehouse": {
+      "label": "창고보관",
+      "desc": "Warehousing"
+    }
   },
   "Shipment": {
     "id": "운송 ID",

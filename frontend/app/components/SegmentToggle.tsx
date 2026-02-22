@@ -1,22 +1,19 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { Ship, Truck, Package, Warehouse, ChevronRight } from 'lucide-react';
 
 export interface Segment {
     key: string;
-    label: string;
     icon: React.ElementType;
-    description: string;
     items: { title: string; subtitle: string }[];
 }
 
 const defaultSegments: Segment[] = [
     {
         key: 'ocean',
-        label: '해상 운송',
         icon: Ship,
-        description: 'Ocean Freight',
         items: [
             { title: 'FCL (Full Container)', subtitle: '20ft · 40ft · HC containers' },
             { title: 'LCL (Less Container)', subtitle: 'Consolidated cargo shipping' },
@@ -25,9 +22,7 @@ const defaultSegments: Segment[] = [
     },
     {
         key: 'air',
-        label: '항공 운송',
         icon: Package,
-        description: 'Air Freight',
         items: [
             { title: 'Express Air', subtitle: 'Time-critical shipments' },
             { title: 'Standard Air Cargo', subtitle: 'Scheduled airline services' },
@@ -36,9 +31,7 @@ const defaultSegments: Segment[] = [
     },
     {
         key: 'inland',
-        label: '내륙 운송',
         icon: Truck,
-        description: 'Inland Transport',
         items: [
             { title: 'FTL (Full Truck Load)', subtitle: 'Dedicated truck service' },
             { title: 'LTL (Less Truck Load)', subtitle: 'Shared transport optimization' },
@@ -47,9 +40,7 @@ const defaultSegments: Segment[] = [
     },
     {
         key: 'warehouse',
-        label: '창고 / 보관',
         icon: Warehouse,
-        description: 'Warehousing',
         items: [
             { title: 'Bonded Warehouse', subtitle: 'Customs-cleared storage' },
             { title: 'Cross-Docking', subtitle: 'Transfer without storage' },
@@ -60,10 +51,10 @@ const defaultSegments: Segment[] = [
 
 interface SegmentToggleProps {
     segments?: Segment[];
-    title?: string;
 }
 
-export function SegmentToggle({ segments = defaultSegments, title = '서비스 카테고리' }: SegmentToggleProps) {
+export function SegmentToggle({ segments = defaultSegments }: SegmentToggleProps) {
+    const t = useTranslations('ServiceCategory');
     const [activeKey, setActiveKey] = useState(segments[0]?.key);
     const activeSegment = segments.find(s => s.key === activeKey) || segments[0];
 
@@ -71,7 +62,7 @@ export function SegmentToggle({ segments = defaultSegments, title = '서비스 �
         <div className="bg-white rounded-2xl border border-[#E8E0D4] shadow-sm overflow-hidden">
             {/* Header */}
             <div className="px-5 pt-5 pb-3">
-                <h3 className="text-sm font-bold text-slate-800">{title}</h3>
+                <h3 className="text-sm font-bold text-slate-800">{t('title')}</h3>
             </div>
 
             <div className="flex flex-col lg:flex-row">
@@ -95,9 +86,9 @@ export function SegmentToggle({ segments = defaultSegments, title = '서비스 �
                                 >
                                     <Icon size={16} className={isActive ? 'text-blue-100' : 'text-slate-400'} />
                                     <div>
-                                        <div className="text-xs font-semibold">{segment.label}</div>
+                                        <div className="text-xs font-semibold">{t(`${segment.key}.label`)}</div>
                                         <div className={`text-[10px] ${isActive ? 'text-blue-200' : 'text-slate-400'} hidden lg:block`}>
-                                            {segment.description}
+                                            {t(`${segment.key}.desc`)}
                                         </div>
                                     </div>
                                 </button>

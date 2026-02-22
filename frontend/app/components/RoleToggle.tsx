@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useTranslations } from 'next-intl';
 import { Briefcase, Building2 } from 'lucide-react';
 
 export type UserRole = 'shipper' | 'forwarder';
@@ -11,6 +12,8 @@ interface RoleToggleProps {
 }
 
 export function RoleToggle({ role, onChange }: RoleToggleProps) {
+    const t = useTranslations('HomePage.RoleToggle');
+
     return (
         <div className="inline-flex items-center bg-slate-100 p-1 rounded-lg border border-slate-200">
             <button
@@ -22,7 +25,7 @@ export function RoleToggle({ role, onChange }: RoleToggleProps) {
                 }`}
             >
                 <Building2 size={16} />
-                <span>화주 (Shipper)</span>
+                <span>{t('shipper')}</span>
             </button>
             <button
                 onClick={() => onChange('forwarder')}
@@ -33,7 +36,7 @@ export function RoleToggle({ role, onChange }: RoleToggleProps) {
                 }`}
             >
                 <Briefcase size={16} />
-                <span>포워더 (Forwarder)</span>
+                <span>{t('forwarder')}</span>
             </button>
         </div>
     );

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Boolean, Numeric, DateTime, Text, ForeignKey, Integer, Float
+from sqlalchemy import Column, String, Boolean, Numeric, DateTime, Text, ForeignKey, Integer, Float, Date
 from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.sql import func, text
 from .database import Base
@@ -133,6 +133,37 @@ class WebhookEvent(Base):
     payload = Column(JSONB)
 
 
+class FreightIndex(Base):
+    __tablename__ = "freight_indices"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, server_default=text("uuid_generate_v4()"))
+    index_code = Column(String, nullable=False, index=True)  # SCFI, FBX, KCCI, WCI
+    index_name = Column(String, nullable=False)
+    value = Column(Numeric(12, 2), nullable=False)
+    change_pct = Column(Numeric(6, 2), default=0.0)
+    recorded_at = Column(Date, nullable=False)
+    source = Column(String, default="seed")
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+
+class RouteRate(Base):
+    __tablename__ = "route_rates"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, server_default=text("uuid_generate_v4()"))
+    origin = Column(String, nullable=False, index=True)
+    destination = Column(String, nullable=False, index=True)
+    mode = Column(String, nullable=False)  # ocean_fcl, ocean_lcl, air, trucking
+    carrier = Column(String)
+    container_type = Column(String)  # 20GP, 40GP, 40HC
+    rate_usd = Column(Numeric(12, 2), nullable=False)
+    transit_days_min = Column(Integer)
+    transit_days_max = Column(Integer)
+    valid_from = Column(Date, nullable=False)
+    valid_to = Column(Date)
+    source = Column(String, default="seed")
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+
 class RateSubscription(Base):
     __tablename__ = "rate_subscriptions"
 
@@ -140,7 +171,9 @@ class RateSubscription(Base):
     tenant_id = Column(UUID(as_uuid=True), ForeignKey("tenants.id", ondelete="CASCADE"))
     origin = Column(String, nullable=False)
     destination = Column(String, nullable=False)
+    mode = Column(String, default="ocean_fcl")
     target_price = Column(Numeric(10, 2))
     alert_frequency = Column(String, default="daily") # daily, instant
     is_active = Column(Boolean, default=True)
+    last_notified_at = Column(DateTime(timezone=True))
     created_at = Column(DateTime(timezone=True), server_default=func.now())

@@ -321,7 +321,135 @@ export const inviteUser = async (data: UserInvite): Promise<User> => {
     return response.data;
 };
 
-// --- Rate API ---
+// --- Market Intelligence API ---
+
+export interface MarketIndex {
+    index_code: string;
+    index_name: string;
+    value: number;
+    change_pct: number;
+    recorded_at: string;
+    sparkline: number[];
+}
+
+export interface IndexHistoryPoint {
+    date: string;
+    value: number;
+    change_pct: number;
+}
+
+export interface IndexHistoryResponse {
+    index_code: string;
+    index_name: string;
+    period: string;
+    data: IndexHistoryPoint[];
+}
+
+export interface RouteRateData {
+    origin: string;
+    destination: string;
+    mode: string;
+    carrier: string | null;
+    container_type: string | null;
+    rate_usd: number;
+    transit_days_min: number | null;
+    transit_days_max: number | null;
+    valid_from: string;
+    valid_to: string | null;
+}
+
+export interface RatesResponse {
+    rates: RouteRateData[];
+    total: number;
+    origin: string | null;
+    destination: string | null;
+    mode: string | null;
+}
+
+export interface RouteCompareItem {
+    origin: string;
+    destination: string;
+    avg_rate_usd: number;
+    min_rate_usd: number;
+    max_rate_usd: number;
+    carrier_count: number;
+    latest_valid_from: string | null;
+}
+
+export interface TrendDataPoint {
+    date: string;
+    avg_rate: number;
+    volume: number;
+}
+
+export interface TrendSummary {
+    trend_direction: string;
+    period_change_pct: number;
+    avg_rate: number;
+    total_data_points: number;
+}
+
+export interface TrendsResponse {
+    period: string;
+    mode: string | null;
+    data: TrendDataPoint[];
+    summary: TrendSummary;
+}
+
+export interface InsightData {
+    type: string;
+    title: string;
+    description: string;
+    severity: string;
+    data: Record<string, unknown>;
+}
+
+export interface InsightsResponse {
+    insights: InsightData[];
+    generated_at: string;
+}
+
+export const fetchMarketIndices = async (): Promise<{ indices: MarketIndex[] }> => {
+    const response = await api.get<{ indices: MarketIndex[] }>('/v1/market/indices');
+    return response.data;
+};
+
+export const fetchIndexHistory = async (code: string, period: string = '30d'): Promise<IndexHistoryResponse> => {
+    const response = await api.get<IndexHistoryResponse>(`/v1/market/indices/${code}/history?period=${period}`);
+    return response.data;
+};
+
+export const fetchRouteRates = async (params: {
+    origin?: string;
+    destination?: string;
+    mode?: string;
+}): Promise<RatesResponse> => {
+    const response = await api.get<RatesResponse>('/v1/market/rates', { params });
+    return response.data;
+};
+
+export const fetchRatesCompare = async (routes: string, mode?: string): Promise<{ routes: RouteCompareItem[]; mode: string | null }> => {
+    const response = await api.get<{ routes: RouteCompareItem[]; mode: string | null }>('/v1/market/rates/compare', {
+        params: { routes, mode },
+    });
+    return response.data;
+};
+
+export const fetchMarketTrends = async (params: {
+    period?: string;
+    mode?: string;
+    origin?: string;
+}): Promise<TrendsResponse> => {
+    const response = await api.get<TrendsResponse>('/v1/market/trends', { params });
+    return response.data;
+};
+
+export const fetchMarketInsights = async (): Promise<InsightsResponse> => {
+    const response = await api.get<InsightsResponse>('/v1/market/insight');
+    return response.data;
+};
+
+// --- Rate Subscription API ---
 
 export interface RateSubscription {
     id: string;
@@ -329,6 +457,7 @@ export interface RateSubscription {
     destination: string;
     target_price?: number;
     alert_frequency: string;
+    mode: string;
     is_active: boolean;
     created_at: string;
 }
@@ -338,6 +467,7 @@ export interface RateSubscriptionCreate {
     destination: string;
     target_price?: number;
     alert_frequency: string;
+    mode: string;
 }
 
 export const createRateSubscription = async (data: RateSubscriptionCreate): Promise<RateSubscription> => {

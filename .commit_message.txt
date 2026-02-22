@@ -1,1 +1,1 @@
-📦 docs(e-POD): PDCA 문서 아카이브 완료 - 매치율 93%, 5번째 아카이브 완료
+📦 chore: Market Intelligence PDCA 아카이브 완료 (93%, 6번째 feature archived)

@@ -2,45 +2,26 @@
 
 import React, { useState, useEffect } from 'react'
 import ToolLayout from '../ToolLayout'
-import { Search, ArrowRight, TrendingDown, Clock, MapPin, Bell, X, Loader2, CheckCircle2 } from 'lucide-react'
-import { createRateSubscription, RateSubscriptionCreate } from '@/lib/api'
+import { Search, ArrowRight, TrendingDown, Clock, MapPin, Bell, Loader2 } from 'lucide-react'
+import { fetchRouteRates, type RatesResponse } from '@/lib/api'
 import { useSearchParams } from 'next/navigation'
-import { PORTS, MODES, Mode } from '@/lib/constants'
-
-// Simulated rate ranges (base + variance by origin-destination hash)
-function simulateRate(origin: string, dest: string, mode: string) {
-  const hash = (origin + dest).split('').reduce((a, c) => a + c.charCodeAt(0), 0)
-  // Fallback for mode parsing
-  const validMode = (MODES.find(m => m.id === mode) ? mode : 'ocean_fcl') as Mode
-  
-  const bases: Record<Mode, { min: number; max: number; days: [number, number] }> = {
-    ocean_fcl: { min: 1200, max: 3800, days: [18, 35] },
-    ocean_lcl: { min: 45, max: 120, days: [22, 40] },
-    air: { min: 3, max: 12, days: [2, 5] },
-    trucking: { min: 800000, max: 2500000, days: [1, 3] },
-  }
-  const b = bases[validMode]
-  const factor = ((hash % 100) / 100)
-  const low = Math.round(b.min + (b.max - b.min) * factor * 0.6)
-  const high = Math.round(low + (b.max - b.min) * 0.25)
-  const dLow = b.days[0] + Math.round(factor * (b.days[1] - b.days[0]) * 0.5)
-  const dHigh = dLow + Math.round((b.days[1] - b.days[0]) * 0.3)
-  return { low, high, daysLow: dLow, daysHigh: dHigh }
-}
+import { PORTS, MODES } from '@/lib/constants'
+import RateTable from '../../../components/RateTable'
+import RateAlertForm from '../../../components/RateAlertForm'
 
 function formatCurrency(v: number) {
   if (v >= 1000000) return `₩${(v / 10000).toLocaleString()}만`
   return `$${v.toLocaleString()}`
 }
 
-/* ───── component ───── */
-
 export default function RateExplorerPage() {
   const searchParams = useSearchParams()
   const [origin, setOrigin] = useState('')
   const [dest, setDest] = useState('')
   const [mode, setMode] = useState<string>('ocean_fcl')
-  const [results, setResults] = useState<ReturnType<typeof simulateRate> | null>(null)
+  const [results, setResults] = useState<RatesResponse | null>(null)
+  const [isSearching, setIsSearching] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   // Initialize from URL params
   useEffect(() => {
@@ -52,59 +33,43 @@ export default function RateExplorerPage() {
     if (pDest) setDest(pDest)
     if (pMode && MODES.some(m => m.id === pMode)) setMode(pMode)
 
-    // Auto-search if all params are present
     if (pOrigin && pDest && pOrigin !== pDest) {
-        setResults(simulateRate(pOrigin, pDest, pMode || 'ocean_fcl'))
+      doSearch(pOrigin, pDest, pMode || 'ocean_fcl')
     }
   }, [searchParams])
 
-  // Subscription State
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [subSuccess, setSubSuccess] = useState(false)
-  const [subForm, setSubForm] = useState<Partial<RateSubscriptionCreate>>({
-      alert_frequency: 'daily'
-  })
+  const doSearch = async (o: string, d: string, m: string) => {
+    setIsSearching(true)
+    try {
+      const data = await fetchRouteRates({ origin: o, destination: d, mode: m })
+      setResults(data)
+    } catch {
+      setResults(null)
+    } finally {
+      setIsSearching(false)
+    }
+  }
 
   const handleSearch = () => {
     if (!origin || !dest || origin === dest) return
-    setResults(simulateRate(origin, dest, mode as Mode))
-  }
-
-  const openSubscribeModal = () => {
-      setSubForm({
-          origin,
-          destination: dest,
-          alert_frequency: 'daily'
-      })
-      setSubSuccess(false)
-      setIsModalOpen(true)
-  }
-
-  const handleSubscribe = async (e: React.FormEvent) => {
-      e.preventDefault()
-      if (!subForm.origin || !subForm.destination) return
-
-      setIsSubmitting(true)
-      try {
-          await createRateSubscription(subForm as RateSubscriptionCreate)
-          setSubSuccess(true)
-          setTimeout(() => {
-              setIsModalOpen(false)
-              setSubSuccess(false)
-          }, 2000)
-      } catch (err) {
-          console.error('Subscription failed', err)
-          alert('구독 신청에 실패했습니다. 다시 시도해주세요.')
-      } finally {
-          setIsSubmitting(false)
-      }
+    doSearch(origin, dest, mode)
   }
 
   const selectedMode = MODES.find(m => m.id === mode)!
 
+  // Compute summary from API results
+  const rates = results?.rates ?? []
+  const minRate = rates.length ? Math.min(...rates.map(r => r.rate_usd)) : 0
+  const maxRate = rates.length ? Math.max(...rates.map(r => r.rate_usd)) : 0
+  const minTransit = rates.length
+    ? Math.min(...rates.filter(r => r.transit_days_min != null).map(r => r.transit_days_min!))
+    : 0
+  const maxTransit = rates.length
+    ? Math.max(...rates.filter(r => r.transit_days_max != null).map(r => r.transit_days_max!))
+    : 0
+
   return (
-    <ToolLayout title="운임 탐색기" description="출발항과 도착항을 선택하면 예상 운임과 소요일수를 확인할 수 있습니다">
+    <ToolLayout title="운임 탐색기" description="출발항과 도착항을 선택하면 실시간 운임과 소요일수를 확인할 수 있습니다">
       {/* ─── Search Form ─── */}
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8 -mt-20 relative z-10">
         {/* Mode Selector */}
@@ -161,27 +126,28 @@ export default function RateExplorerPage() {
 
           <button
             onClick={handleSearch}
-            disabled={!origin || !dest || origin === dest}
+            disabled={!origin || !dest || origin === dest || isSearching}
             className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-blue-600 text-white font-semibold text-sm hover:bg-blue-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed self-end"
           >
-            <Search size={16} /> 조회
+            {isSearching ? <Loader2 size={16} className="animate-spin" /> : <Search size={16} />}
+            조회
           </button>
         </div>
       </div>
 
-      {/* ─── Results ─── */}
-      {results && (
+      {/* ─── Results Summary Cards ─── */}
+      {results && rates.length > 0 && (
         <div className="mt-8 grid sm:grid-cols-3 gap-6">
           {/* Rate Card */}
           <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border border-blue-100 p-6">
             <div className="flex items-center gap-2 text-blue-600 mb-2">
               <TrendingDown size={18} />
-              <span className="text-sm font-medium">예상 운임 범위</span>
+              <span className="text-sm font-medium">운임 범위</span>
             </div>
             <div className="text-2xl sm:text-3xl font-bold text-slate-900">
-              {formatCurrency(results.low)} ~ {formatCurrency(results.high)}
+              {formatCurrency(minRate)} ~ {formatCurrency(maxRate)}
             </div>
-            <div className="mt-1 text-sm text-slate-500">{selectedMode.unit}</div>
+            <div className="mt-1 text-sm text-slate-500">{selectedMode.unit} · {rates.length} carriers</div>
           </div>
 
           {/* Days Card */}
@@ -191,7 +157,7 @@ export default function RateExplorerPage() {
               <span className="text-sm font-medium">예상 소요일수</span>
             </div>
             <div className="text-2xl sm:text-3xl font-bold text-slate-900">
-              {results.daysLow} ~ {results.daysHigh}일
+              {minTransit && maxTransit ? `${minTransit} ~ ${maxTransit}일` : '-'}
             </div>
             <div className="mt-1 text-sm text-slate-500">영업일 기준</div>
           </div>
@@ -199,16 +165,16 @@ export default function RateExplorerPage() {
           {/* Route Card */}
           <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl border border-amber-100 p-6">
             <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-2 text-amber-600">
-                    <MapPin size={18} />
-                    <span className="text-sm font-medium">항로 정보</span>
-                </div>
-                <button 
-                    onClick={openSubscribeModal}
-                    className="text-xs bg-white text-amber-600 border border-amber-200 hover:bg-amber-50 px-2 py-1 rounded-full flex items-center gap-1 transition-colors"
-                >
-                    <Bell size={12} /> 알림 받기
-                </button>
+              <div className="flex items-center gap-2 text-amber-600">
+                <MapPin size={18} />
+                <span className="text-sm font-medium">항로 정보</span>
+              </div>
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="text-xs bg-white text-amber-600 border border-amber-200 hover:bg-amber-50 px-2 py-1 rounded-full flex items-center gap-1 transition-colors"
+              >
+                <Bell size={12} /> 알림 받기
+              </button>
             </div>
             <div className="text-lg font-bold text-slate-900">
               {PORTS.find(p => p.code === origin)?.name} → {PORTS.find(p => p.code === dest)?.name}
@@ -218,80 +184,45 @@ export default function RateExplorerPage() {
         </div>
       )}
 
-      {results && (
+      {/* ─── Carrier Rate Table ─── */}
+      {results && rates.length > 0 && (
+        <div className="mt-6">
+          <RateTable rates={rates} />
+        </div>
+      )}
+
+      {/* ─── No Results ─── */}
+      {results && rates.length === 0 && (
+        <div className="mt-8 text-center py-12 bg-white rounded-2xl border border-slate-200">
+          <selectedMode.icon size={48} className="mx-auto mb-4 text-slate-300" />
+          <p className="text-slate-500">해당 항로의 운임 데이터가 아직 없습니다.</p>
+          <p className="text-sm text-slate-400 mt-1">다른 항로나 운송 모드를 시도해보세요.</p>
+        </div>
+      )}
+
+      {results && rates.length > 0 && (
         <div className="mt-6 bg-amber-50 border border-amber-200 rounded-xl px-5 py-4 text-sm text-amber-800">
-          💡 <strong>참고:</strong> 표시된 운임은 시장 평균 기반 추정치이며, 실제 운임은 화물 조건·시즌·서비스에 따라 달라집니다.
+          <strong>참고:</strong> 표시된 운임은 시장 데이터 기반이며, 실제 운임은 화물 조건/시즌/서비스에 따라 달라집니다.
           정확한 견적은 <a href="/register" className="underline font-semibold hover:text-amber-900">LogiNexus 가입</a> 후 AI 견적 엔진에서 확인하세요.
         </div>
       )}
 
       {/* Empty State */}
-      {!results && (
+      {!results && !isSearching && (
         <div className="mt-12 text-center text-slate-400">
           <selectedMode.icon size={48} className="mx-auto mb-4 opacity-30" />
           <p className="text-lg">출발항과 도착항을 선택한 뒤 <strong className="text-slate-600">조회</strong>를 눌러주세요</p>
         </div>
       )}
 
-      {/* ─── Subscribe Modal ─── */}
+      {/* ─── Alert Modal ─── */}
       {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
-            <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm overflow-hidden animate-in fade-in zoom-in duration-200">
-                <div className="p-5 border-b border-slate-100 flex items-center justify-between">
-                    <h3 className="font-bold text-lg text-slate-900">운임 알림 설정</h3>
-                    <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-slate-600">
-                        <X size={20} />
-                    </button>
-                </div>
-                
-                {subSuccess ? (
-                    <div className="p-8 text-center">
-                        <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <CheckCircle2 size={24} />
-                        </div>
-                        <h4 className="font-bold text-slate-900 mb-1">알림 설정 완료!</h4>
-                        <p className="text-slate-500 text-sm">해당 구간의 운임 변동 시 알림을 보내드립니다.</p>
-                    </div>
-                ) : (
-                    <form onSubmit={handleSubscribe} className="p-5 space-y-4">
-                        <div className="bg-slate-50 rounded-lg p-3 text-sm text-slate-600">
-                            <strong>{PORTS.find(p => p.code === subForm.origin)?.name}</strong>에서 <strong>{PORTS.find(p => p.code === subForm.destination)?.name}</strong>로 향하는 운임 변동을 추적합니다.
-                        </div>
-                        
-                        <div>
-                            <label className="block text-xs font-semibold text-slate-500 mb-1">목표 운임 (선택)</label>
-                            <input 
-                                type="number" 
-                                placeholder="예: 2000 (USD)"
-                                className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-sm"
-                                onChange={(e) => setSubForm({...subForm, target_price: parseInt(e.target.value) || undefined})}
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-xs font-semibold text-slate-500 mb-1">알림 주기</label>
-                            <select 
-                                className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-sm"
-                                value={subForm.alert_frequency}
-                                onChange={(e) => setSubForm({...subForm, alert_frequency: e.target.value})}
-                            >
-                                <option value="daily">매일 (변동 시)</option>
-                                <option value="instant">즉시</option>
-                            </select>
-                        </div>
-
-                        <button 
-                            type="submit" 
-                            disabled={isSubmitting}
-                            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-xl transition-colors disabled:opacity-70 flex items-center justify-center gap-2"
-                        >
-                            {isSubmitting && <Loader2 size={16} className="animate-spin" />}
-                            알림 받기
-                        </button>
-                    </form>
-                )}
-            </div>
-          </div>
+        <RateAlertForm
+          origin={origin}
+          destination={dest}
+          mode={mode}
+          onClose={() => setIsModalOpen(false)}
+        />
       )}
     </ToolLayout>
   )

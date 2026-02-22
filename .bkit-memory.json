@@ -43,6 +43,17 @@
       "archivedTo": "docs/archive/2026-02/smart-contract-escrow/",
       "matchRate": 92,
       "iterations": 1
+    },
+    "market-intelligence": {
+      "phase": "archived",
+      "startedAt": "2026-02-22",
+      "doStartedAt": "2026-02-22",
+      "doCompletedAt": "2026-02-22",
+      "checkCompletedAt": "2026-02-22",
+      "completedAt": "2026-02-22",
+      "archivedAt": "2026-02-22",
+      "archivedTo": "docs/archive/2026-02/market-intelligence/",
+      "matchRate": 93
     }
   }
 }
